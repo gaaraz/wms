@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianyun.wms.dao.CategoryMapper">
+    <resultMap id="categoryMap" type="com.jianyun.wms.domain.Category">
+        <id property="id" column="CATEGORY_ID" />
+        <result property="name" column="CATEGORY_NAME" />
+    </resultMap>
+    <select id="categoryList" resultMap="categoryMap" >
+        SELECT * FROM wms_category
+    </select>
+
+    <insert id="insertCategory" parameterType="com.jianyun.wms.domain.Category" >
+        INSERT INTO wms_category (CATEGORY_ID,CATEGORY_NAME) VALUE (#{id},#{name})
+    </insert>
+
+    <delete id="deleteCategory">
+        DELETE FROM wms_category WHERE CATEGORY_ID = #{id}
+    </delete>
+
+    <update id="updateCategory" parameterType="com.jianyun.wms.domain.Category">
+        UPDATE wms_category SET CATEGORY_NAME = #{name} WHERE CATEGORY_ID = #{id}
+    </update>
+</mapper>

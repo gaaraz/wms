@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianyun.wms.dao.GoodsMapper">
+
+	<resultMap type="com.jianyun.wms.domain.Goods" id="goods">
+		<id property="id" column="GOOD_ID"/>
+		<result property="name" column="GOOD_NAME"/>
+		<result property="size" column="GOOD_SIZE"/>
+		<result property="value" column="GOOD_VALUE"/>
+		<result property="categoryId" column="CATEGORY_ID" />
+	</resultMap>
+	
+	<select id="selectAll" resultMap="goods">
+		select
+			g.GOOD_ID,
+			g.GOOD_NAME,
+			g.GOOD_SIZE,
+			g.GOOD_VALUE,
+			g.CATEGORY_ID
+		from 
+			wms_goods g
+	</select>
+	
+	<select id="selectById" resultMap="goods">
+		select
+			g.GOOD_ID,
+			g.GOOD_NAME,
+			g.GOOD_SIZE,
+			g.GOOD_VALUE,
+			g.CATEGORY_ID
+		from 
+			wms_goods g
+		where
+			g.GOOD_ID = #{id}
+	</select>
+	
+	<select id="selectByName" resultMap="goods">
+		select
+			g.GOOD_ID,
+			g.GOOD_NAME,
+			g.GOOD_SIZE,
+			g.GOOD_VALUE,
+			g.CATEGORY_ID
+		from 
+			wms_goods g
+		where
+			g.GOOD_NAME = #{goodsName}
+	</select>
+	
+	<select id="selectApproximateByName" resultMap="goods">
+		select
+			g.GOOD_ID,
+			g.GOOD_NAME,
+			g.GOOD_SIZE,
+			g.GOOD_VALUE,
+			g.CATEGORY_ID
+		from 
+			wms_goods g
+		where
+			g.GOOD_NAME like concat(concat('%',#{goodsName}),'%')
+	</select>
+
+	<insert id="insert">
+		insert into wms_goods(GOOD_NAME,GOOD_SIZE,GOOD_VALUE,CATEGORY_ID)
+		values (#{name},#{size},#{value},#{categoryId})
+	</insert>
+	
+	<insert id="insertBatch">
+		insert into wms_goods(GOOD_NAME,GOOD_SIZE,GOOD_VALUE,CATEGORY_ID)
+		values
+		<foreach collection="list" item="goods" separator=",">
+			(#{goods.name},#{goods.size},#{goods.value},#{goods.categoryId})
+		</foreach>
+	</insert>
+	
+	<update id="update">
+		update
+			wms_goods
+		set
+			GOOD_NAME = #{name},
+			GOOD_SIZE = #{size},
+			GOOD_VALUE = #{value},
+			CATEGORY_ID = #{categoryId}
+		where
+			GOOD_ID = #{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from wms_goods
+		where GOOD_ID = #{id}
+	</delete>
+	
+	<delete id="deleteByName">
+		delete from wms_goods
+		where GOOD_NAME = #{goodsName}
+	</delete>
+
+	<select id="selectByCategoryId" resultMap="goods" >
+		SELECT * FROM wms_goods WHERE CATEGORY_ID = #{id}
+	</select>
+</mapper>
