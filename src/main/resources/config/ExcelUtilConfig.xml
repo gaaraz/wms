@@ -57,7 +57,11 @@
 			<value>货物名称</value>
 		</property>
 		<property>
-			<field>type</field>
+			<field>categoryId</field>
+			<value>货物类型ID</value>
+		</property>
+		<property>
+			<field>category</field>
 			<value>货物类型</value>
 		</property>
 		<property>
@@ -155,6 +159,18 @@
 		<property>
 			<field>repositoryID</field>
 			<value>仓库ID</value>
+		</property>
+		<property>
+			<field>repository</field>
+			<value>仓库名称</value>
+		</property>
+		<property>
+			<field>shelvesID</field>
+			<value>货架ID</value>
+		</property>
+		<property>
+			<field>shelves</field>
+			<value>货架名称</value>
 		</property>
 		<property>
 			<field>number</field>

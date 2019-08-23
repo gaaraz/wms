@@ -21,7 +21,7 @@ public interface StorageManageService {
      *
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectAll(Integer repositoryID) throws StorageManageServiceException;
+    Map<String, Object> selectAll(Integer repositoryID, Integer shelvesID) throws StorageManageServiceException;
 
     /**
      * 分页返回所有的库存记录
@@ -30,7 +30,7 @@ public interface StorageManageService {
      * @param limit  分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectAll(Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
+    Map<String, Object> selectAll(Integer repositoryID, Integer shelvesID, int offset, int limit) throws StorageManageServiceException;
 
     /**
      * 返回指定货物ID的库存记录
@@ -38,7 +38,7 @@ public interface StorageManageService {
      * @param goodsID 指定的货物ID
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID) throws StorageManageServiceException;
+    Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID, Integer shelvesID) throws StorageManageServiceException;
 
     /**
      * 分页返回指定的货物库存记录
@@ -48,7 +48,7 @@ public interface StorageManageService {
      * @param limit   分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
+    Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID, Integer shelvesID, int offset, int limit) throws StorageManageServiceException;
 
     /**
      * 返回指定货物名称的库存记录
@@ -56,7 +56,7 @@ public interface StorageManageService {
      * @param goodsName 货物名称
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID) throws StorageManageServiceException;
+    Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, Integer shelvesID) throws StorageManageServiceException;
 
     /**
      * 分页返回指定货物名称的库存记录
@@ -66,7 +66,7 @@ public interface StorageManageService {
      * @param limit     分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
+    Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, Integer shelvesID, int offset, int limit) throws StorageManageServiceException;
 
     /**
      * 返回指定货物类型的库存记录
@@ -94,7 +94,7 @@ public interface StorageManageService {
      * @param number       库存数量
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
-    boolean addNewStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean addNewStorage(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException;
 
     /**
      * 更新一条库存记录
@@ -104,7 +104,7 @@ public interface StorageManageService {
      * @param number       更新的库存数量
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
-    boolean updateStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean updateStorage(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException;
 
     /**
      * 为指定的货物库存记录增加指定数目
@@ -114,7 +114,7 @@ public interface StorageManageService {
      * @param number       增加的数量
      * @return 返回一个 boolean 值，若值为true表示数目增加成功，否则表示增加失败
      */
-    boolean storageIncrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean storageIncrease(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException;
 
     /**
      * 为指定的货物库存记录减少指定的数目
@@ -124,7 +124,7 @@ public interface StorageManageService {
      * @param number       减少的数量
      * @return 返回一个 boolean 值，若值为 true 表示数目减少成功，否则表示增加失败
      */
-    boolean storageDecrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean storageDecrease(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException;
 
     /**
      * 删除一条库存记录
@@ -134,7 +134,7 @@ public interface StorageManageService {
      * @param repositoryID 指定的仓库ID
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
-    boolean deleteStorage(Integer goodsID, Integer repositoryID) throws StorageManageServiceException;
+    boolean deleteStorage(Integer goodsID, Integer repositoryID, Integer shelvesID) throws StorageManageServiceException;
 
     /**
      * 导入库存记录

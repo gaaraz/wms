@@ -78,7 +78,7 @@
 										title : '货物名称'
 									},
 									{
-										field : 'categoryId',
+										field : 'category',
 										title : '货物类型'
 									},
 									{
@@ -140,7 +140,7 @@
 		// load info
 		$('#goods_form_edit').bootstrapValidator("resetForm", true);
 		$('#goods_name_edit').val(row.name);
-		$('#category_id_edit').val(row.type);
+		$('#category_id_edit').val(row.categoryId);
 		$('#goods_size_edit').val(row.size);
 		$('#goods_value_edit').val(row.value);
 	}
@@ -879,7 +879,7 @@
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物类型：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
-									<select name="" id="category_id_edit" name="category_id" class="form-control">
+									<select name="" id="category_id_edit" name="category_id_edit" class="form-control">
 										<option value="">请选择货物类型</option>
 									</select>
 								</div>

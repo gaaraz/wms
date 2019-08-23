@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <script>
 var stockin_repository = null;// 入库仓库编号
+var stockin_shelves = null;// 入库货架编号
 var stockin_supplier = null;// 入库供应商编号
 var stockin_goods = null;// 入库货物编号
 var stockin_number = null;// 入库数量
@@ -10,12 +11,13 @@ var supplierCache = new Array();// 供应商信息缓存
 var goodsCache = new Array();//货物信息缓存
 
 $(function(){
-	repositorySelectorInit();
+//	repositorySelectorInit();
 	dataValidateInit();
 	detilInfoToggle();
 
 	stockInOption();
 	fetchStorage();
+    fetchShelves();
 	supplierAutocomplete();
 	goodsAutocomplete();
 })
@@ -76,6 +78,7 @@ function goodsAutocomplete(){
 			$('#goods_input').val(ui.item.label);
 			stockin_goods = ui.item.value;
 			goodsInfoSet(stockin_goods);
+            repositorySelectorInit(stockin_goods);
 			loadStorageInfo();
 			return false;
 		}
@@ -180,10 +183,10 @@ function goodsInfoSet(goodsID){
 			else
 				$('#info_goods_name').text(detailInfo.name);
 			
-			if(detailInfo.type==null)
+			if(detailInfo.category==null)
 				$('#info_goods_type').text('-');
 			else
-				$('#info_goods_type').text(detailInfo.type);
+				$('#info_goods_type').text(detailInfo.category);
 			
 			if(detailInfo.size==null)
 				$('#info_goods_size').text('-');
@@ -197,6 +200,8 @@ function goodsInfoSet(goodsID){
 		}
 	})
 }
+
+
 
 // 详细信息显示与隐藏
 function detilInfoToggle(){
@@ -214,22 +219,21 @@ function detilInfoToggle(){
 }
 
 // 仓库下拉列表初始化
-function repositorySelectorInit(){
+function repositorySelectorInit(goodsID){
 	$.ajax({
 		type : 'GET',
-		url : 'repositoryManage/getRepositoryList',
+		url : 'repositoryManage/getRepositoryByGoodId',
 		dataType : 'json',
 		contentType : 'application/json',
 		data : {
-			searchType : 'searchAll',
-			keyWord : '',
-			offset : -1,
-			limit : -1
+            goodId : goodsID
 		},
 		success : function(response){
-			$.each(response.rows,function(index,elem){
-				$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
-			});
+            $('#repository_selector').empty();
+            $('#repository_selector').append("<option value='' selected>请选择仓库</option>");
+            $.each(response.data,function(index,elem){
+                $('#repository_selector').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+            });
 		},
 		error : function(response){
 			$('#repository_selector').append("<option value='-1'>加载失败</option>");
@@ -238,16 +242,49 @@ function repositorySelectorInit(){
 	})
 }
 
-// 获取仓库当前库存量
-function fetchStorage(){
+// 获取仓库的货架
+function fetchShelves(){
 	$('#repository_selector').change(function(){
 		stockin_repository = $(this).val();
-		loadStorageInfo();
+        loadShelvesInfo();
 	});
 }
 
+// 获取仓库当前货架库存量
+function fetchStorage(){
+    $('#shelves_selector').change(function(){
+        stockin_shelves = $(this).val();
+        loadStorageInfo();
+    });
+}
+
+function loadShelvesInfo(){
+    if(stockin_repository != null && stockin_goods != null){
+        $.ajax({
+            type : 'GET',
+            url : 'shelvesManage/queryByReposAndGood',
+            dataType : 'json',
+            contentType : 'application/json',
+            data : {
+                repositoryId : stockin_repository,
+                goodId : stockin_goods
+            },
+            success : function(response){
+                $('#shelves_selector').empty();
+                $('#shelves_selector').append("<option value='' selected>请选择货架</option>");
+                $.each(response.rows,function(index,elem){
+                    $('#shelves_selector').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+                });
+            },
+            error : function(response){
+                $('#shelves_selector').append("<option value='-1'>加载失败</option>");
+            }
+        })
+    }
+}
+
 function loadStorageInfo(){
-	if(stockin_repository != null && stockin_goods != null){
+	if(stockin_repository != null && stockin_goods != null && stockin_shelves != null){
 		$.ajax({
 			type : 'GET',
 			url : 'storageManage/getStorageListWithRepository',
@@ -258,6 +295,7 @@ function loadStorageInfo(){
 				limit : -1,
 				searchType : 'searchByGoodsID',
 				repositoryBelong : stockin_repository,
+                shelvesBelong : stockin_shelves,
 				keyword : stockin_goods
 			},
 			success : function(response){
@@ -286,6 +324,7 @@ function stockInOption(){
 
 		data = {
 			repositoryID : stockin_repository,
+            shelvesID : stockin_shelves,
 			supplierID : stockin_supplier,
 			goodsID : stockin_goods,
 			number : $('#stockin_input').val(),
@@ -337,6 +376,10 @@ function inputReset(){
 	$('#info_goods_type').text('-');
 	$('#info_goods_value').text('-');
 	$('#info_storage').text('-');
+    $('#shelves_selector').empty();
+    $('#shelves_selector').append("<option value='' selected>请选择货架</option>");
+    $('#repository_selector').empty();
+    $('#repository_selector').append("<option value='' selected>请选择仓库</option>");
 	$('#stockin_form').bootstrapValidator("resetForm",true); 
 }
 
@@ -523,6 +566,7 @@ function infoModal(type, msg) {
 								</div>
 							</div>
 						</div>
+
 						<div class="row" style="margin-top: 10px">
 							<div class="col-md-6 col-sm-6">
 								<div class="row">
@@ -539,7 +583,23 @@ function infoModal(type, msg) {
 									</div>
 								</div>
 							</div>
+							<div class="col-md-6 col-sm-6">
+								<div class="row">
+									<div class="col-md-1 col-sm-1"></div>
+									<div class="col-md-10 col-sm-11">
+										<form action="" class="form-inline">
+											<div class="form-group">
+												<label for="" class="form-label">入库货架：</label>
+												<select name="" id="shelves_selector" class="form-control">
+													<option value="">请选择货架</option>
+												</select>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
 						</div>
+
 						<div class="row" style="margin-top:20px">
 							<div class="col-md-6 col-sm-6">
 								<div class="row">

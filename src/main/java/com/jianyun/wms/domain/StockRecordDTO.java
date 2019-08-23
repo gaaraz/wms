@@ -17,7 +17,7 @@ public class StockRecordDTO {
      * 记录的类型（出库/入库）
      */
     private String type;
-
+    
     /**
      * 供应商（入库）或客户（出库）名称
      */
@@ -32,6 +32,13 @@ public class StockRecordDTO {
      * 出库或入库仓库ID
      */
     private Integer repositoryID;
+    private String repository;
+
+    /**
+     * 出库或入库货架ID
+     */
+    private Integer shelvesID;
+    private String shelves;
 
     /**
      * 出库或入库数量
@@ -48,6 +55,22 @@ public class StockRecordDTO {
      */
     private String personInCharge;
 
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    public String getShelves() {
+        return shelves;
+    }
+
+    public void setShelves(String shelves) {
+        this.shelves = shelves;
+    }
 
     public Integer getRecordID() {
         return recordID;
@@ -111,6 +134,14 @@ public class StockRecordDTO {
 
     public void setPersonInCharge(String personInCharge) {
         this.personInCharge = personInCharge;
+    }
+
+    public Integer getShelvesID() {
+        return shelvesID;
+    }
+
+    public void setShelvesID(Integer shelvesID) {
+        this.shelvesID = shelvesID;
     }
 
     @Override

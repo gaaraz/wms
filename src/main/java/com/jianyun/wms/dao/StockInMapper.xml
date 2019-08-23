@@ -15,6 +15,9 @@
 		<result property="time" column="STOCKIN_TIME"/>
 		<result property="personInCharge" column="STOCKIN_PERSON"/>
 		<result property="repositoryID" column="STOCKIN_REPOSITORY_ID"/>
+		<result property="repository" column="STOCKIN_REPOSITORY"/>
+		<result property="shelvesID" column="STOCKIN_SHELVES_ID" />
+		<result property="shelves" column="STOCKIN_SHELVES" />
 	</resultMap>
 	
 	<select id="selectAll" resultMap="stockInDO">
@@ -27,12 +30,20 @@
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			res.REPO_NAME as STOCKIN_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKIN_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKIN_SHELVES
 		from
-			wms_record_in r,wms_goods g,wms_supplier s
-		where
-			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID
+			wms_record_in r
+			LEFT JOIN wms_goods g
+			ON r.RECORD_GOODID = g.GOOD_ID
+			LEFT JOIN wms_supplier s
+			ON r.RECORD_SUPPLIERID = s.SUPPLIER_ID
+			LEFT JOIN wms_respository res
+			ON r.RECORD_REPOSITORYID = res.REPO_ID
+			LEFT JOIN wms_shelves sh
+			ON r.RECORD_SHELVESID = sh.SHELVES_ID
 	</select>
 	
 	<select id="selectBySupplierId" resultMap="stockInDO">
@@ -45,12 +56,21 @@
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			res.REPO_NAME as STOCKIN_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKIN_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKIN_SHELVES
 		from
-			wms_record_in r,wms_goods g,wms_supplier s
+			wms_record_in r
+			LEFT JOIN wms_goods g
+			ON r.RECORD_GOODID = g.GOOD_ID
+			LEFT JOIN wms_supplier s
+			ON r.RECORD_SUPPLIERID = s.SUPPLIER_ID
+			LEFT JOIN wms_respository res
+			ON r.RECORD_REPOSITORYID = res.REPO_ID
+			LEFT JOIN wms_shelves sh
+			ON r.RECORD_SHELVESID = sh.SHELVES_ID
 		where
-			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
 			r.RECORD_SUPPLIERID = #{supplierID}
 	</select>
 	
@@ -64,12 +84,21 @@
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			res.REPO_NAME as STOCKIN_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKIN_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKIN_SHELVES
 		from
-			wms_record_in r,wms_goods g,wms_supplier s
+			wms_record_in r
+			LEFT JOIN wms_goods g
+			ON r.RECORD_GOODID = g.GOOD_ID
+			LEFT JOIN wms_supplier s
+			ON r.RECORD_SUPPLIERID = s.SUPPLIER_ID
+			LEFT JOIN wms_respository res
+			ON r.RECORD_REPOSITORYID = res.REPO_ID
+			LEFT JOIN wms_shelves sh
+			ON r.RECORD_SHELVESID = sh.SHELVES_ID
 		where
-			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
 			r.RECORD_GOODID = #{goodID}
 	</select>
 	
@@ -83,12 +112,21 @@
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			res.REPO_NAME as STOCKIN_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKIN_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKIN_SHELVES
 		from
-			wms_record_in r,wms_goods g,wms_supplier s
+			wms_record_in r
+			LEFT JOIN wms_goods g
+			ON r.RECORD_GOODID = g.GOOD_ID
+			LEFT JOIN wms_supplier s
+			ON r.RECORD_SUPPLIERID = s.SUPPLIER_ID
+			LEFT JOIN wms_respository res
+			ON r.RECORD_REPOSITORYID = res.REPO_ID
+			LEFT JOIN wms_shelves sh
+			ON r.RECORD_SHELVESID = sh.SHELVES_ID
 		where
-			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
 			r.RECORD_ID = #{id}
 	</select>
 	
@@ -102,45 +140,64 @@
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			res.REPO_NAME as STOCKIN_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKIN_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKIN_SHELVES
 		from
-			wms_record_in r,wms_goods g,wms_supplier s
+			wms_record_in r
+			LEFT JOIN wms_goods g
+			ON r.RECORD_GOODID = g.GOOD_ID
+			LEFT JOIN wms_supplier s
+			ON r.RECORD_SUPPLIERID = s.SUPPLIER_ID
+			LEFT JOIN wms_respository res
+			ON r.RECORD_REPOSITORYID = res.REPO_ID
+			LEFT JOIN wms_shelves sh
+			ON r.RECORD_SHELVESID = sh.SHELVES_ID
 		where
-			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
 			r.RECORD_REPOSITORYID = #{repositoryID}
 	</select>
 
 	<select id="selectByRepositoryIDAndDate" resultMap="stockInDO">
-        select
-            r.RECORD_ID as STOCKIN_ID,
-            r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
-            s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-            r.RECORD_GOODID as STOCKIN_GOOD_ID,
-            g.GOOD_NAME as STOCKIN_GOOD_NAME,
-            r.RECORD_NUMBER as STOCKIN_NUMBER,
-            r.RECORD_TIME as STOCKIN_TIME,
-            r.RECORD_PERSON as STOCKIN_PERSON,
-            r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
-        from
-            wms_record_in r,wms_goods g,wms_supplier s
-        where
-            r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-            r.RECORD_GOODID = g.GOOD_ID
-        <if test="repositoryID > 0">
-            and r.RECORD_REPOSITORYID = #{repositoryID}
-        </if>
-        <if test="startDate != null">
-            and r.RECORD_TIME >= #{startDate}
-        </if>
-        <if test="endDate != null">
-            <![CDATA[and r.RECORD_TIME <= #{endDate}]]>
-        </if>
+		select
+			r.RECORD_ID as STOCKIN_ID,
+			r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
+			s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
+			r.RECORD_GOODID as STOCKIN_GOOD_ID,
+			g.GOOD_NAME as STOCKIN_GOOD_NAME,
+			r.RECORD_NUMBER as STOCKIN_NUMBER,
+			r.RECORD_TIME as STOCKIN_TIME,
+			r.RECORD_PERSON as STOCKIN_PERSON,
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			res.REPO_NAME as STOCKIN_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKIN_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKIN_SHELVES
+		from
+			wms_record_in r
+		LEFT JOIN wms_goods g
+		ON r.RECORD_GOODID = g.GOOD_ID
+		LEFT JOIN wms_supplier s
+		ON r.RECORD_SUPPLIERID = s.SUPPLIER_ID
+		LEFT JOIN wms_respository res
+		ON r.RECORD_REPOSITORYID = res.REPO_ID
+		LEFT JOIN wms_shelves sh
+		ON r.RECORD_SHELVESID = sh.SHELVES_ID
+        <where>
+			<if test="repositoryID > 0">
+				and r.RECORD_REPOSITORYID = #{repositoryID}
+			</if>
+			<if test="startDate != null">
+				and r.RECORD_TIME >= #{startDate,jdbcType=DATE}
+			</if>
+			<if test="endDate != null">
+				<![CDATA[and r.RECORD_TIME <= #{endDate,jdbcType=DATE}]]>
+			</if>
+		</where>
 	</select>
 	
 	<insert id="insert">
-		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{supplierID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_SHELVESID)
+		values(#{supplierID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID},#{shelvesID})
 	</insert>
 	
 	<update id="update">

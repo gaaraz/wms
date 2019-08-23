@@ -5,14 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianyun.wms.common.service.Interface.GoodsManageService;
 import com.jianyun.wms.common.util.ExcelUtil;
-import com.jianyun.wms.dao.GoodsMapper;
-import com.jianyun.wms.dao.StockInMapper;
-import com.jianyun.wms.dao.StockOutMapper;
-import com.jianyun.wms.dao.StorageMapper;
-import com.jianyun.wms.domain.Goods;
-import com.jianyun.wms.domain.StockInDO;
-import com.jianyun.wms.domain.StockOutDO;
-import com.jianyun.wms.domain.Storage;
+import com.jianyun.wms.dao.*;
+import com.jianyun.wms.domain.*;
 import com.jianyun.wms.exception.GoodsManageServiceException;
 import com.jianyun.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -21,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 货物信息管理Service 实现类
@@ -44,6 +35,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
     private StorageMapper storageMapper;
     @Autowired
     private ExcelUtil excelUtil;
+    @Autowired
+    private ShelvesMapper shelvesMapper;
 
     /**
      * 返回指定goods ID 的货物记录
@@ -73,6 +66,29 @@ public class GoodsManageServiceImpl implements GoodsManageService {
 
         resultSet.put("data", goodsList);
         resultSet.put("total", total);
+        return resultSet;
+    }
+
+    @Override
+    public Map<String, Object> getGoodsListByShelvesId(Integer shelvesId) throws GoodsManageServiceException {
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Goods> goodsList;
+
+        try {
+            Shelves shelves = shelvesMapper.selectById(shelvesId);
+            String[] goodIdArray = shelves.getGoodIds().split(",");
+            List<String> stringList = Arrays.asList(goodIdArray);
+            List<Integer> idList = new ArrayList<>();
+            for (String s:stringList){
+                idList.add(Integer.parseInt(s));
+            }
+            goodsList = goodsMapper.selectByIds(idList);
+        } catch (PersistenceException e) {
+            throw new GoodsManageServiceException(e);
+        }
+
+        resultSet.put("data", goodsList);
+        resultSet.put("total", goodsList.size());
         return resultSet;
     }
 
@@ -275,7 +291,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
                 return false;
 
             // 检查该货物是否有存储信息
-            List<Storage> storageRecord = storageMapper.selectByGoodsIDAndRepositoryID(goodsId, null);
+            List<Storage> storageRecord = storageMapper.selectByGoodsIDAndRepositoryID(goodsId, null,null);
             if (storageRecord != null && !storageRecord.isEmpty())
                 return false;
 
@@ -346,4 +362,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
         return excelUtil.excelWriter(Goods.class, goods);
     }
 
+    @Override
+    public Goods selectOneById(Integer id) {
+        return goodsMapper.selectById(id);
+    }
 }

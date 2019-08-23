@@ -7,6 +7,7 @@
 	
 	<resultMap type="com.jianyun.wms.domain.Repository" id="repository">
 		<id property="id" column="REPO_ID"/>
+		<result property="name" column="REPO_NAME" />
 		<result property="address" column="REPO_ADDRESS"/>
 		<result property="status" column="REPO_STATUS"/>
 		<result property="area" column="REPO_AREA"/>
@@ -17,6 +18,7 @@
 	<select id="selectAll" resultMap="repository">
 		select
 			r.REPO_ID,
+			r.REPO_NAME,
 			r.REPO_ADDRESS,
 			r.REPO_STATUS,
 			r.REPO_AREA,
@@ -29,6 +31,7 @@
 	<select id="selectUnassign" resultMap="repository">
 		select
 			r.REPO_ID,
+			r.REPO_NAME,
 			r.REPO_ADDRESS,
 			r.REPO_STATUS,
 			r.REPO_AREA,
@@ -48,6 +51,7 @@
 	<select id="selectByID" resultMap="repository">
 		select
 			r.REPO_ID,
+			r.REPO_NAME,
 			r.REPO_ADDRESS,
 			r.REPO_STATUS,
 			r.REPO_AREA,
@@ -62,6 +66,7 @@
 	<select id="selectByAddress" resultMap="repository">
 		select
 			r.REPO_ID,
+			r.REPO_NAME,
 			r.REPO_ADDRESS,
 			r.REPO_STATUS,
 			r.REPO_AREA,
@@ -72,17 +77,34 @@
 		where
 			r.REPO_ADDRESS like concat(concat("%",#{address},"%"))
 	</select>
+
+	<select id="selectByList" resultMap="repository">
+		select
+			r.REPO_ID,
+			r.REPO_NAME,
+			r.REPO_ADDRESS,
+			r.REPO_STATUS,
+			r.REPO_AREA,
+			r.REPO_DESC,
+			ra.REPO_ADMIN_NAME
+		from
+			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
+		where r.REPO_ID IN
+			<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+	</select>
 	
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true">
-		insert into wms_respository(REPO_ADDRESS,REPO_STATUS,REPO_AREA,REPO_DESC)
-		values(#{address},#{status},#{area},#{desc})
+		insert into wms_respository(REPO_NAME,REPO_ADDRESS,REPO_STATUS,REPO_AREA,REPO_DESC)
+		values(#{name},#{address},#{status},#{area},#{desc})
 	</insert>
 	
 	<insert id="insertbatch">
-		insert into wms_respository(REPO_ADDRESS,REPO_STATUS,REPO_AREA,REPO_DESC)
+		insert into wms_respository(REPO_NAME,REPO_ADDRESS,REPO_STATUS,REPO_AREA,REPO_DESC)
 		values
 		<foreach collection="list" item="repository" separator=",">
-			(#{repository.address},#{repository.status},#{repository.area},#{repository.desc})
+			(#{repository.name},#{repository.address},#{repository.status},#{repository.area},#{repository.desc})
 		</foreach>
 	</insert>
 	
@@ -90,6 +112,7 @@
 		update
 			wms_respository
 		set
+			REPO_NAME = #{name},
 			REPO_ADDRESS = #{address},
 			REPO_STATUS = #{status},
 			REPO_AREA = #{area},

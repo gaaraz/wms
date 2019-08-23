@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <script>
 var stockout_repository = null;
+var stockout_shelves = null;
 var stockout_customer = null;
 var stockout_goods = null;
 var stockout_number = null;
@@ -11,11 +12,11 @@ var goodsCache = new Array();
 
 $(function(){
 	dataValidateInit();
-	repositorySelectorInit();
 	detilInfoToggle();
 	stockoutOperation();
 
 	fetchStorage();
+    fetchShelves();
 	goodsAutocomplete();
 	customerAutocomplete();
 })
@@ -28,11 +29,11 @@ function dataValidateInit(){
 			stockout_input : {
 				validators : {
 					notEmpty : {
-						message : '入库数量不能为空'
+						message : '出库数量不能为空'
 					},
 					greaterThan: {
                         value: 0,
-                        message: '入库数量不能小于0'
+                        message: '出库数量不能小于0'
                     }
 				}
 			}
@@ -75,7 +76,7 @@ function goodsAutocomplete(){
 			$('#goods_input').val(ui.item.label);
 			stockout_goods = ui.item.value;
 			goodsInfoSet(stockout_goods);
-			loadStorageInfo();
+            repositorySelectorInit(stockout_goods);
 			return false;
 		}
 	})
@@ -136,10 +137,10 @@ function goodsInfoSet(goodsID){
 			else
 				$('#info_goods_name').text(detailInfo.name);
 			
-			if(detailInfo.type==null)
+			if(detailInfo.category==null)
 				$('#info_goods_type').text('-');
 			else
-				$('#info_goods_type').text(detailInfo.type);
+				$('#info_goods_type').text(detailInfo.category);
 			
 			if(detailInfo.size==null)
 				$('#info_goods_size').text('-');
@@ -208,65 +209,99 @@ function detilInfoToggle(){
 	});
 }
 
-//仓库下拉列表初始化
-function repositorySelectorInit(){
-	$.ajax({
-		type : 'GET',
-		url : 'repositoryManage/getRepositoryList',
-		dataType : 'json',
-		contentType : 'application/json',
-		data : {
-			searchType : 'searchAll',
-			keyWord : '',
-			offset : -1,
-			limit : -1
-		},
-		success : function(response){
-			$.each(response.rows,function(index,elem){
-				$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
-			});
-		},
-		error : function(response){
-			$('#repository_selector').append("<option value='-1'>加载失败</option>");
-		}
-		
-	})
+// 仓库下拉列表初始化
+function repositorySelectorInit(goodsID){
+    $.ajax({
+        type : 'GET',
+        url : 'repositoryManage/getRepositoryByGoodId',
+        dataType : 'json',
+        contentType : 'application/json',
+        data : {
+            goodId : goodsID
+        },
+        success : function(response){
+            $('#repository_selector').empty();
+            $('#repository_selector').append("<option value='' selected>请选择仓库</option>");
+            $.each(response.data,function(index,elem){
+                $('#repository_selector').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+            });
+        },
+        error : function(response){
+            $('#repository_selector').append("<option value='-1'>加载失败</option>");
+        }
+
+    })
 }
 
+// 获取仓库的货架
+function fetchShelves(){
+    $('#repository_selector').change(function(){
+        stockout_repository = $(this).val();
+        loadShelvesInfo();
+    });
+}
+
+// 获取仓库当前货架库存量
 function fetchStorage(){
-	$('#repository_selector').change(function(){
-		stockout_repository = $(this).val();
-		loadStorageInfo();
-	});
+    $('#shelves_selector').change(function(){
+        stockout_shelves = $(this).val();
+        loadStorageInfo();
+    });
+}
+
+function loadShelvesInfo(){
+    if(stockout_repository != null && stockout_goods != null){
+        $.ajax({
+            type : 'GET',
+            url : 'shelvesManage/queryByReposAndGood',
+            dataType : 'json',
+            contentType : 'application/json',
+            data : {
+                repositoryId : stockout_repository,
+                goodId : stockout_goods
+            },
+            success : function(response){
+                $('#shelves_selector').empty();
+                $('#shelves_selector').append("<option value='' selected>请选择货架</option>");
+                $.each(response.rows,function(index,elem){
+                    $('#shelves_selector').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+                });
+            },
+            error : function(response){
+                $('#shelves_selector').append("<option value='-1'>加载失败</option>");
+            }
+        })
+    }
 }
 
 function loadStorageInfo(){
-	if(stockout_repository != null && stockout_goods != null){
-		$.ajax({
-			type : 'GET',
-			url : 'storageManage/getStorageListWithRepository',
-			dataType : 'json',
-			contentType : 'application/json',
-			data : {
-				offset : -1,
-				limit : -1,
-				searchType : 'searchByGoodsID',
-				repositoryBelong : stockout_repository,
-				keyword : stockout_goods
-			},
-			success : function(response){
-				if(response.total > 0){
-					data = response.rows[0].number;
-					$('#info_storage').text(data);
-				}else{
-					$('#info_storage').text('0');
-				}
-			},
-			error : function(response){
-				
-			}
-		})
-	}
+    if(stockout_repository != null && stockout_goods != null && stockout_shelves != null){
+        $.ajax({
+            type : 'GET',
+            url : 'storageManage/getStorageListWithRepository',
+            dataType : 'json',
+            contentType : 'application/json',
+            data : {
+                offset : -1,
+                limit : -1,
+                searchType : 'searchByGoodsID',
+                repositoryBelong : stockout_repository,
+                shelvesBelong : stockout_shelves,
+                keyword : stockout_goods
+            },
+            success : function(response){
+                if(response.total > 0){
+                    data = response.rows[0].number;
+                    $('#info_storage').text(data);
+                }else{
+                    $('#info_storage').text('0');
+                }
+            },
+            error : function(response){
+
+            }
+        })
+    }
 }
 
 //执行货物出库操作
@@ -282,6 +317,7 @@ function stockoutOperation(){
 			customerID : stockout_customer,
 			goodsID : stockout_goods,
 			repositoryID : stockout_repository,
+            shelvesID : stockout_shelves,
 			number : $('#stockout_input').val(),
 		}
 
@@ -330,6 +366,10 @@ function inputReset(){
 	$('#info_goods_type').text('-');
 	$('#info_goods_value').text('-');
 	$('#info_storage').text('-');
+    $('#shelves_selector').empty();
+    $('#shelves_selector').append("<option value='' selected>请选择货架</option>");
+    $('#repository_selector').empty();
+    $('#repository_selector').append("<option value='' selected>请选择仓库</option>");
 	$('#stockout_form').bootstrapValidator("resetForm",true); 
 }
 
@@ -517,7 +557,7 @@ function infoModal(type, msg) {
 								</div>
 							</div>
 						</div>
-						<div class="row" style="margin-top:10px">
+						<div class="row" style="margin-top: 10px">
 							<div class="col-md-6 col-sm-6">
 								<div class="row">
 									<div class="col-md-1 col-sm-1"></div>
@@ -525,10 +565,23 @@ function infoModal(type, msg) {
 										<form action="" class="form-inline">
 											<div class="form-group">
 												<label for="" class="form-label">出库仓库：</label>
-												<!--
-												<input type="text" class="form-control" placeholder="仓库编号">
-											-->
 												<select name="" id="repository_selector" class="form-control">
+													<option value="">请选择仓库</option>
+												</select>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6">
+								<div class="row">
+									<div class="col-md-1 col-sm-1"></div>
+									<div class="col-md-10 col-sm-11">
+										<form action="" class="form-inline">
+											<div class="form-group">
+												<label for="" class="form-label">出库货架：</label>
+												<select name="" id="shelves_selector" class="form-control">
+													<option value="">请选择货架</option>
 												</select>
 											</div>
 										</form>

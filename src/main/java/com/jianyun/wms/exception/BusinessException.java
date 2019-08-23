@@ -23,7 +23,7 @@ public class BusinessException extends Exception{
         this.exceptionDesc = exceptionDesc;
     }
 
-    BusinessException(){}
+    public BusinessException(){}
 
     public String getExceptionDesc() {
         return exceptionDesc;

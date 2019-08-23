@@ -24,6 +24,7 @@ public interface GoodsManageService {
      */
     Map<String, Object> selectById(Integer goodsId) throws GoodsManageServiceException;
 
+    Map<String,Object> getGoodsListByShelvesId(Integer shelvesId) throws GoodsManageServiceException;
     /**
      * 返回指定 goods name 的货物记录
      * 支持查询分页以及模糊查询
@@ -99,4 +100,6 @@ public interface GoodsManageService {
      * @return excel 文件
      */
     File exportGoods(List<Goods> goods);
+
+    Goods selectOneById(Integer id);
 }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianyun.wms.dao.CheckRecordMapper">
+    <resultMap id="record" type="com.jianyun.wms.domain.CheckRecord" >
+        <id property="id" column="CHECK_ID" />
+        <result property="respositoryID" column="REPO_ID" />
+        <result property="respository" column="RESPOSITORY_NAME" />
+        <result property="shelvesID" column="SHELVES_ID" />
+        <result property="shelves" column="SHELVES_NAME" />
+        <result property="goodID" column="GOOD_ID" />
+        <result property="good" column="GOOD_NAME" />
+        <result property="recordNum" column="RECORD_NUM" />
+        <result property="realNum" column="REAL_NUM" />
+        <result property="person" column="PERSON" />
+        <result property="checkTime" column="CHECK_TIME" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="record" >
+        SELECT
+          cr.CHECK_ID,cr.REPO_ID,
+          r.REPO_NAME as RESPOSITORY_NAME,
+          cr.SHELVES_ID,s.SHELVES_NAME,
+          cr.GOOD_ID,g.GOOD_NAME,
+          cr.RECORD_NUM,cr.REAL_NUM,
+          cr.PERSON,cr.CHECK_TIME
+        FROM
+          wms_check_record cr
+        LEFT JOIN wms_respository r
+        ON cr.REPO_ID = r.REPO_ID
+        LEFT JOIN wms_shelves s
+        ON cr.SHELVES_ID = s.SHELVES_ID
+        LEFT JOIN wms_goods g
+        ON cr.GOOD_ID = g.GOOD_ID
+    </select>
+
+    <select id="selectByParam" parameterType="java.util.Map"  resultMap="record">
+        SELECT
+          cr.CHECK_ID,cr.REPO_ID,
+          r.REPO_NAME as RESPOSITORY_NAME,
+          cr.SHELVES_ID,s.SHELVES_NAME,
+          cr.GOOD_ID,g.GOOD_NAME,
+          cr.RECORD_NUM,cr.REAL_NUM,
+          cr.PERSON,cr.CHECK_TIME
+        FROM
+          wms_check_record cr
+        LEFT JOIN wms_respository r
+        ON cr.REPO_ID = r.REPO_ID
+        LEFT JOIN wms_shelves s
+        ON cr.SHELVES_ID = s.SHELVES_ID
+        LEFT JOIN wms_goods g
+        ON cr.GOOD_ID = g.GOOD_ID
+        <where>
+            <if test="goodId != null and goodId != ''">
+                AND cr.GOOD_ID = #{goodId}
+            </if>
+            <if test="repositoryId != null and repositoryId != ''">
+                AND cr.REPO_ID = #{repositoryId}
+            </if>
+            <if test="shelvesId != null and shelvesId != ''">
+                AND cr.SHELVES_ID = #{shelvesId}
+            </if>
+            <if test="startDate != null" >
+                AND cr.CHECK_TIME >= #{startDate,jdbcType=DATE}
+            </if>
+            <if test="endDate != null" >
+                <![CDATA[and cr.CHECK_TIME <= #{endDate,jdbcType=DATE}]]>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.jianyun.wms.domain.CheckRecord" >
+        INSERT INTO wms_check_record (REPO_ID,SHELVES_ID,GOOD_ID,RECORD_NUM,REAL_NUM,PERSON,CHECK_TIME)
+        VALUE (#{respositoryID},#{shelvesID},#{goodID},#{recordNum},#{realNum},#{person},now())
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM wms_check_record
+        WHERE CHECK_ID = #{id}
+    </delete>
+</mapper>

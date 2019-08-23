@@ -135,6 +135,17 @@ public class RepositoryManageHandler {
         return resultSet;
     }
 
+
+    @RequestMapping(value = "getRepositoryByGoodId", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> getRepositoryByGoodId(@RequestParam("goodId") String goodId) throws RepositoryManageServiceException {
+        // 查询
+        Map<String, Object> queryResult = repositoryService.selectByGoodId(goodId);
+        return queryResult;
+    }
+
+
     /**
      * 添加一条仓库信息
      *

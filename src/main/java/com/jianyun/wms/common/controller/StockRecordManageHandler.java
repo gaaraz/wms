@@ -48,7 +48,7 @@ public class StockRecordManageHandler {
     @RequestMapping(value = "stockOut", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> stockOut(@RequestParam("customerID") Integer customerID,
+    Map<String, Object> stockOut(@RequestParam("customerID") Integer customerID,@RequestParam("shelvesID") Integer shelvesID,
                                  @RequestParam("goodsID") Integer goodsID, @RequestParam("repositoryID") Integer repositoryID,
                                  @RequestParam("number") long number, HttpServletRequest request) throws StockRecordManageServiceException {
         // 初始化 Response
@@ -57,7 +57,7 @@ public class StockRecordManageHandler {
         HttpSession session = request.getSession();
         String personInCharge = (String) session.getAttribute("userName");
 
-        String result = stockRecordManageService.stockOutOperation(customerID, goodsID, repositoryID, number, personInCharge) ?
+        String result = stockRecordManageService.stockOutOperation(customerID, goodsID, repositoryID, shelvesID, number, personInCharge) ?
                 Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
 
         // 设置 Response
@@ -78,7 +78,7 @@ public class StockRecordManageHandler {
     @RequestMapping(value = "stockIn", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> stockIn(@RequestParam("supplierID") Integer supplierID,
+    Map<String, Object> stockIn(@RequestParam("supplierID") Integer supplierID, @RequestParam("shelvesID") Integer shelvesID,
                                 @RequestParam("goodsID") Integer goodsID, @RequestParam("repositoryID") Integer repositoryID,
                                 @RequestParam("number") long number, HttpServletRequest request) throws StockRecordManageServiceException {
         // 初始化 Response
@@ -87,7 +87,7 @@ public class StockRecordManageHandler {
         HttpSession session = request.getSession();
         String personInCharge = (String) session.getAttribute("userName");
 
-        String result = stockRecordManageService.stockInOperation(supplierID, goodsID, repositoryID, number, personInCharge) ?
+        String result = stockRecordManageService.stockInOperation(supplierID, goodsID, repositoryID, shelvesID, number, personInCharge) ?
                 Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
 
         // 设置 Response

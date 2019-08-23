@@ -3,7 +3,6 @@ package com.jianyun.wms.util;
 import com.jianyun.wms.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @author Ken
  * @since 2017/3/8.
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static Logger logger = LoggerFactory.getLogger("ExceptionLogging");

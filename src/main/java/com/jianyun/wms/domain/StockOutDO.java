@@ -39,6 +39,14 @@ public class StockOutDO {
      * 出库仓库ID
      */
     private Integer repositoryID;
+    private String repository;
+
+    /**
+     * 出库货架ID
+     */
+    private Integer shelvesID;
+
+    private String shelves;
 
     /**
      * 商品出库数量
@@ -54,6 +62,30 @@ public class StockOutDO {
      * 出库经手人
      */
     private String personInCharge;// 经手人
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    public String getShelves() {
+        return shelves;
+    }
+
+    public void setShelves(String shelves) {
+        this.shelves = shelves;
+    }
+
+    public Integer getShelvesID() {
+        return shelvesID;
+    }
+
+    public void setShelvesID(Integer shelvesID) {
+        this.shelvesID = shelvesID;
+    }
 
     public Integer getRepositoryID() {
         return repositoryID;

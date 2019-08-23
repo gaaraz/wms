@@ -3,6 +3,7 @@ package com.jianyun.wms.common.service.Impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianyun.wms.common.service.Interface.RepositoryService;
+import com.jianyun.wms.common.service.Interface.ShelvesService;
 import com.jianyun.wms.common.util.ExcelUtil;
 import com.jianyun.wms.dao.*;
 import com.jianyun.wms.domain.*;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 仓库信息管理 service 实现类
@@ -39,6 +37,8 @@ public class RepositoryManageServiceImpl implements RepositoryService {
     private StorageMapper storageMapper;
     @Autowired
     private RepositoryAdminMapper repositoryAdminMapper;
+    @Autowired
+    private ShelvesMapper shelvesMapper;
 
     /**
      * 返回指定 repository ID 的仓库记录
@@ -268,7 +268,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
                 return false;
 
             // 检查是否存在库存记录
-            List<Storage> storageRecords = storageMapper.selectAllAndRepositoryID(repositoryId);
+            List<Storage> storageRecords = storageMapper.selectAllAndRepositoryID(repositoryId,null);
             if (storageRecords != null && !storageRecords.isEmpty())
                 return false;
 
@@ -374,4 +374,32 @@ public class RepositoryManageServiceImpl implements RepositoryService {
         return resultSet;
     }
 
+    @Override
+    public Map<String, Object> selectByGoodId(String goodId) throws RepositoryManageServiceException {
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Repository> repositories;
+        long total = 0;
+
+        try {
+            List<Shelves> shelvesList = shelvesMapper.selectByGoods(goodId);
+            Set<Integer> respoSet = new HashSet<>();
+            List<Integer> respoList = new ArrayList<>();
+            for (Shelves shelves:shelvesList){
+                respoSet.add(shelves.getRepoId());
+            }
+            respoList.addAll(respoSet);
+
+            repositories = repositoryMapper.selectByList(respoList);
+        } catch (PersistenceException e) {
+            throw new RepositoryManageServiceException(e);
+        }
+
+        if (repositories != null){
+            total = repositories.size();
+        }
+
+        resultSet.put("data", repositories);
+        resultSet.put("total", total);
+        return resultSet;
+    }
 }

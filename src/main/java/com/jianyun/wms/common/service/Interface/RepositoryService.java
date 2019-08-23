@@ -67,6 +67,8 @@ public interface RepositoryService {
      */
     Map<String, Object> selectUnassign() throws RepositoryManageServiceException;
 
+
+    Map<String, Object> selectByGoodId(String goodId) throws RepositoryManageServiceException;
     /**
      * 添加仓库记录
      *

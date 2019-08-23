@@ -37,6 +37,8 @@ public interface RepositoryMapper {
 	 * @return 返回指定的Repository 
 	 */
 	List<Repository> selectByAddress(String address);
+
+	List<Repository> selectByList(List<Integer> list);
 	
 	/**
 	 * 插入一条新的 Repository 记录

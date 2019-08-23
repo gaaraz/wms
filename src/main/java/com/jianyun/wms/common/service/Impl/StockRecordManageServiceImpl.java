@@ -32,6 +32,8 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     @Autowired
     private RepositoryMapper repositoryMapper;
     @Autowired
+    private ShelvesMapper shelvesMapper;
+    @Autowired
     private StorageManageService storageManageService;
     @Autowired
     private StockInMapper stockinMapper;
@@ -49,10 +51,10 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      */
     @UserOperation(value = "货物入库")
     @Override
-    public boolean stockInOperation(Integer supplierID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException {
+    public boolean stockInOperation(Integer supplierID, Integer goodsID, Integer repositoryID, Integer shelvesID, long number, String personInCharge) throws StockRecordManageServiceException {
 
         // ID对应的记录是否存在
-        if (!(supplierValidate(supplierID) && goodsValidate(goodsID) && repositoryValidate(repositoryID)))
+        if (!(supplierValidate(supplierID) && goodsValidate(goodsID) && repositoryValidate(repositoryID) && ShelvesValidate(shelvesID)))
             return false;
 
         if (personInCharge == null)
@@ -65,7 +67,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         try {
             // 更新库存记录
             boolean isSuccess;
-            isSuccess = storageManageService.storageIncrease(goodsID, repositoryID, number);
+            isSuccess = storageManageService.storageIncrease(goodsID, repositoryID, shelvesID, number);
 
             // 保存入库记录
             if (isSuccess) {
@@ -76,6 +78,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                 stockInDO.setPersonInCharge(personInCharge);
                 stockInDO.setTime(new Date());
                 stockInDO.setRepositoryID(repositoryID);
+                stockInDO.setShelvesID(shelvesID);
                 stockinMapper.insert(stockInDO);
             }
 
@@ -96,7 +99,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      */
     @UserOperation(value = "货物出库")
     @Override
-    public boolean stockOutOperation(Integer customerID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException {
+    public boolean stockOutOperation(Integer customerID, Integer goodsID, Integer repositoryID, Integer shelvesID, long number, String personInCharge) throws StockRecordManageServiceException {
 
         // 检查ID对应的记录是否存在
         if (!(customerValidate(customerID) && goodsValidate(goodsID) && repositoryValidate(repositoryID)))
@@ -109,7 +112,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         try {
             // 更新库存信息
             boolean isSuccess;
-            isSuccess = storageManageService.storageDecrease(goodsID, repositoryID, number);
+            isSuccess = storageManageService.storageDecrease(goodsID, repositoryID, shelvesID, number);
 
             // 保存出库记录
             if (isSuccess) {
@@ -119,6 +122,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                 stockOutDO.setNumber(number);
                 stockOutDO.setPersonInCharge(personInCharge);
                 stockOutDO.setRepositoryID(repositoryID);
+                stockOutDO.setShelvesID(shelvesID);
                 stockOutDO.setTime(new Date());
                 stockOutMapper.insert(stockOutDO);
             }
@@ -344,7 +348,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         return result;
     }
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm");
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 将 StockInDO 转换为 StockRecordDTO
@@ -360,6 +364,9 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setNumber(stockInDO.getNumber());
         stockRecordDTO.setTime(dateFormat.format(stockInDO.getTime()));
         stockRecordDTO.setRepositoryID(stockInDO.getRepositoryID());
+        stockRecordDTO.setRepository(stockInDO.getRepository());
+        stockRecordDTO.setShelvesID(stockInDO.getShelvesID());
+        stockRecordDTO.setShelves(stockInDO.getShelves());
         stockRecordDTO.setPersonInCharge(stockInDO.getPersonInCharge());
         stockRecordDTO.setType("入库");
         return stockRecordDTO;
@@ -379,6 +386,9 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setNumber(stockOutDO.getNumber());
         stockRecordDTO.setTime(dateFormat.format(stockOutDO.getTime()));
         stockRecordDTO.setRepositoryID(stockOutDO.getRepositoryID());
+        stockRecordDTO.setRepository(stockOutDO.getRepository());
+        stockRecordDTO.setShelvesID(stockOutDO.getShelvesID());
+        stockRecordDTO.setShelves(stockOutDO.getShelves());
         stockRecordDTO.setPersonInCharge(stockOutDO.getPersonInCharge());
         stockRecordDTO.setType("出库");
         return stockRecordDTO;
@@ -410,6 +420,15 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         try {
             Repository repository = repositoryMapper.selectByID(repositoryID);
             return repository != null;
+        } catch (PersistenceException e) {
+            throw new StockRecordManageServiceException(e);
+        }
+    }
+
+    private boolean ShelvesValidate(Integer shelvesID) throws StockRecordManageServiceException {
+        try {
+            Shelves shelves = shelvesMapper.selectById(shelvesID);
+            return shelves != null;
         } catch (PersistenceException e) {
             throw new StockRecordManageServiceException(e);
         }

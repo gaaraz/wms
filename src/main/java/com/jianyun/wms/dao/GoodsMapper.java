@@ -26,6 +26,8 @@ public interface GoodsMapper {
 	 * @return 返回执行ID对应的Goods
 	 */
 	Goods selectById(Integer id);
+
+	List<Goods> selectByIds(List<Integer> list);
 	
 	/**
 	 * 选择指定 Goods name 的 Goods

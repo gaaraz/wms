@@ -5,8 +5,10 @@
 	var search_type_storage = "none";
 	var search_keyWord = "";
 	var search_repository = "";
+	var search_shelves = "";
 	var select_goodsID;
 	var select_repositoryID;
+	var select_shelvesID;
 
 	$(function() {
 		optionAction();
@@ -14,6 +16,7 @@
 		storageListInit();
 		bootstrapValidatorInit();
 		repositoryOptionInit();
+        shelvesOptionInit();
 
 		addStorageAction();
 		editStorageAction();
@@ -36,10 +39,7 @@
 			} else if (type == "货物名称") {
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsName";
-			} else if(type = "货物类型"){
-				$("#search_input_type").removeAttr("readOnly");
-				search_type_storage = "searchByGoodsType";
-			}else {
+			} else {
 				$("#search_input_type").removeAttr("readOnly");
 			}
 
@@ -64,7 +64,7 @@
 			success : function(response){
 			    //组装option
 				$.each(response.rows,function(index,elem){
-					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
 				})
 			},
 			error : function(response){
@@ -73,11 +73,41 @@
 		$('#search_input_repository').append("<option value='all'>请选择仓库</option>");
 	}
 
+    // 仓库下拉框数据初始化，页面加载时完成
+    function shelvesOptionInit(){
+        $('#search_input_repository').change(function(){
+            var reposId = $(this).val();
+            $('#search_input_shelves').empty();
+            $.ajax({
+                type : 'GET',
+                url : 'shelvesManage/list',
+                dataType : 'json',
+                contentType : 'application/json',
+                data:{
+                    searchType : "searchByRepos",
+                    keyWord : reposId,
+                    offset : -1,
+                    limit : -1
+                },
+                success : function(response){
+                    //组装option
+                    $.each(response.rows,function(index,elem){
+                        $('#search_input_shelves').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+                    })
+                },
+                error : function(response){
+                }
+            });
+            $('#search_input_shelves').append("<option value='all'>请选择货架</option>");
+		});
+    }
+
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input_type').val();
 			search_repository = $('#search_input_repository').val();
+            search_shelves = $('#search_input_shelves').val();
 			tableRefresh();
 		})
 	}
@@ -89,6 +119,7 @@
 			offset : params.offset,
 			searchType : search_type_storage,
 			repositoryBelong : search_repository,
+			shelvesBelong : search_shelves,
 			keyword : search_keyWord
 		}
 		return temp;
@@ -124,8 +155,12 @@
 										visible : false
 									},
 									{
-										field : 'repositoryID',
-										title : '仓库ID'
+										field : 'repository',
+										title : '仓库'
+									},
+									{
+										field : 'shelves',
+										title : '货架'
 									},
 									{
 										field : 'number',
@@ -150,7 +185,8 @@
 											'click .delete' : function(e,
 													value, row, index) {
 												select_goodsID = row.goodsID;
-												select_repositoryID = row.repositoryID
+												select_repositoryID = row.repositoryID;
+                                                select_shelvesID = row.shelvesID;
 												$('#deleteWarning_modal').modal(
 														'show');
 											}
@@ -184,6 +220,7 @@
 		$('#storage_form_edit').bootstrapValidator("resetForm", true);
 		$('#storage_goodsID_edit').text(row.goodsID);
 		$('#storage_repositoryID_edit').text(row.repositoryID);
+        $('#storage_shelvesID_edit').text(row.shelvesID);
 		$('#storage_number_edit').val(row.number);
 	}
 
@@ -212,6 +249,13 @@
 						}
 					}
 				},
+                storage_shelvesID : {
+                    validators : {
+                        notEmpty : {
+                            message : '货架ID不能为空'
+                        }
+                    }
+                },
 				storage_number : {
 					validators : {
 						notEmpty : {
@@ -237,6 +281,7 @@
 					var data = {
 						goodsID : $('#storage_goodsID_edit').text(),
 						repositoryID : $('#storage_repositoryID_edit').text(),
+                        shelvesID : $('#storage_shelvesID_edit').text(),
 						number : $('#storage_number_edit').val(),
 					}
 
@@ -272,16 +317,17 @@
 		$('#delete_confirm').click(function(){
 			var data = {
 				"goodsID" : select_goodsID,
-				"repositoryID" : select_repositoryID
+				"repositoryID" : select_repositoryID,
+				"shelvesID" : select_shelvesID,
 			}
 			
 			// ajax
 			$.ajax({
-				type : "GET",
+				type : "POST",
 				url : "storageManage/deleteStorageRecord",
 				dataType : "json",
 				contentType : "application/json",
-				data : data,
+				data : JSON.stringify(data),
 				success : function(response){
 					$('#deleteWarning_modal').modal("hide");
 					var type;
@@ -313,6 +359,7 @@
 			var data = {
 				goodsID : $('#storage_goodsID').val(),
 				repositoryID : $('#storage_repositoryID').val(),
+				shelvesID : $('#storage_shelvesID').val(),
 				number : $('#storage_number').val()
 			}
 			// ajax
@@ -339,6 +386,7 @@
 					// reset
 					$('#storage_goodsID').val("");
 					$('#storage_repositoryID').val("");
+                    $('#storage_shelvesID').val("");
 					$('#storage_number').val("");
 					$('#storage_form').bootstrapValidator("resetForm", true);
 				},
@@ -522,7 +570,6 @@
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0)" class="dropOption">货物ID</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">货物名称</a></li>
-						<li><a href="javascript:void(0)" class="dropOption">货物类型</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -536,6 +583,11 @@
 					<!--通过后台查询仓库信息-->
 					<div class="col-md-3 col-sm-4">
 						<select class="form-control" id="search_input_repository">
+						</select>
+					</div>
+					<!--通过后台查询货架信息-->
+					<div class="col-md-3 col-sm-4">
+						<select class="form-control" id="search_input_shelves">
 						</select>
 					</div>
 					<div class="col-md-2 col-sm-2">
@@ -602,6 +654,14 @@
 								<div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="storage_repositoryID"
 										name="storage_repositoryID" placeholder="仓库ID">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货架ID：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="storage_shelvesID"
+										   name="storage_shelvesID" placeholder="仓库ID">
 								</div>
 							</div>
 							<div class="form-group">
@@ -897,6 +957,13 @@
 								</label>
 								<div class="col-md-4 col-sm-4">
 									<p id="storage_repositoryID_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货架ID：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_shelvesID_edit" class="form-control-static"></p>
 								</div>
 							</div>
 							<div class="form-group">

@@ -73,6 +73,10 @@
 									//sortable: true
 									},
 									{
+										field : 'name',
+										title : '仓库名称'
+									},
+									{
 										field : 'address',
 										title : '仓库地址'
 									},
@@ -144,6 +148,7 @@
 
 		// load info
 		$('#repository_form_edit').bootstrapValidator("resetForm", true);
+        $('#repository_name_edit').val(row.name);
 		$('#repository_address_edit').val(row.address);
 		$('#repository_status_edit').val(row.status);
 		$('#repository_area_edit').val(row.area);
@@ -161,6 +166,13 @@
 			},
 			excluded : [ ':disabled' ],
 			fields : {
+                repository_name : {
+                    validators : {
+                        notEmpty : {
+                            message : '仓库名称不能为空'
+                        }
+                    }
+                },
 				repository_address : {
 					validators : {
 						notEmpty : {
@@ -199,6 +211,7 @@
 
 					var data = {
 						id : selectID,
+						name:$('#repository_name_edit').val(),
 						address : $('#repository_address_edit').val(),
 						status : $('#repository_status_edit').val(),
 						area : $('#repository_area_edit').val(),
@@ -276,6 +289,7 @@
 
 		$('#add_modal_submit').click(function() {
 			var data = {
+                name : $('#repository_name').val(),
 				address : $('#repository_address').val(),
 				status : $('#repository_status').val(),
 				area : $('#repository_area').val(),
@@ -303,6 +317,7 @@
 					tableRefresh();
 
 					// reset
+                    $('#repository_name').val("");
 					$('#repository_address').val("");
 					$('#repository_ststus').val("");
 					$('#repository_area').val("");
@@ -548,6 +563,14 @@
 					<div class="col-md-8 col-sm-8">
 						<form class="form-horizontal" role="form" id="repository_form"
 							style="margin-top: 25px">
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库名称：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="repository_name"
+										   name="repository_name" placeholder="仓库名称">
+								</div>
+							</div>
 							<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库地址：</span>
 								</label>
@@ -851,6 +874,14 @@
 					<div class="col-md-8 col-sm-8">
 						<form class="form-horizontal" role="form" id="repository_form_edit"
 							style="margin-top: 25px">
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库名称：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="repository_name_edit"
+										   name="repository_name" placeholder="仓库名称">
+								</div>
+							</div>
 							<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库地址：</span>
 								</label>

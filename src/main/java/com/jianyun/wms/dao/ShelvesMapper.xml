@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianyun.wms.dao.ShelvesMapper">
+    <resultMap id="shelves" type="com.jianyun.wms.domain.Shelves">
+        <id column="SHELVES_ID" property="id" />
+        <result column="SHELVES_NAME" property="name" />
+        <result column="REPO_ID" property="repoId" />
+        <result column="REPO_NAME" property="repoName" />
+        <result column="GOOD_IDS" property="goodIds" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="shelves" >
+        SELECT
+          s.SHELVES_ID,
+          s.SHELVES_NAME,
+          s.REPO_ID,
+          s.GOOD_IDS,
+          r.REPO_NAME
+        FROM
+          wms_shelves s
+        LEFT JOIN
+          wms_respository r
+        ON
+          s.REPO_ID = r.REPO_ID
+    </select>
+
+    <select id="selectByName" resultMap="shelves" >
+        SELECT
+          s.SHELVES_ID,
+          s.SHELVES_NAME,
+          s.REPO_ID,
+          s.GOOD_IDS,
+          r.REPO_NAME
+        FROM
+          wms_shelves s
+        LEFT JOIN
+          wms_respository r
+        ON
+          s.REPO_ID = r.REPO_ID
+        WHERE
+          s.SHELVES_NAME like concat(concat('%',#{name}),'%')
+    </select>
+
+    <select id="selectByRepos" resultMap="shelves" >
+        SELECT
+          s.SHELVES_ID,
+          s.SHELVES_NAME,
+          s.REPO_ID,
+          s.GOOD_IDS,
+          r.REPO_NAME
+        FROM
+          wms_shelves s
+        LEFT JOIN
+          wms_respository r
+        ON
+          s.REPO_ID = r.REPO_ID
+        WHERE
+          s.REPO_ID = #{repoId}
+    </select>
+
+    <select id="selectByGoods" resultMap="shelves">
+        SELECT
+          s.SHELVES_ID,
+          s.SHELVES_NAME,
+          s.REPO_ID,
+          s.GOOD_IDS,
+          r.REPO_NAME
+        FROM
+          wms_shelves s
+        LEFT JOIN
+          wms_respository r
+        ON
+          s.REPO_ID = r.REPO_ID
+        WHERE
+          FIND_IN_SET( #{goodId},GOOD_IDS)
+    </select>
+
+    <select id="selectById" resultMap="shelves">
+        SELECT
+          s.SHELVES_ID,
+          s.SHELVES_NAME,
+          s.REPO_ID,
+          s.GOOD_IDS,
+          r.REPO_NAME
+        FROM
+          wms_shelves s
+        LEFT JOIN
+          wms_respository r
+        ON
+          s.REPO_ID = r.REPO_ID
+        WHERE
+          s.SHELVES_ID = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.jianyun.wms.domain.Shelves" >
+        INSERT INTO wms_shelves (SHELVES_NAME,REPO_ID,GOOD_IDS) VALUE (#{name},#{repoId},#{goodIds})
+    </insert>
+
+    <update id="update" parameterType="com.jianyun.wms.domain.Shelves" >
+        UPDATE
+          wms_shelves
+        SET
+          SHELVES_NAME = #{name},
+          REPO_ID = #{repoId},
+          GOOD_IDS = #{goodIds}
+        WHERE
+          SHELVES_ID = #{id}
+    </update>
+
+    <delete id="deleteByID" >
+        DELETE FROM wms_shelves
+        WHERE SHELVES_ID = #{shelvesID}
+    </delete>
+</mapper>

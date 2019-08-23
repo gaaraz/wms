@@ -14,6 +14,9 @@ public class Storage {
 	private String goodsType;// 货物类型
 	private Double goodsValue;// 货物价值
 	private Integer repositoryID;// 仓库ID
+	private String repository;// 仓库
+	private Integer shelvesID;// 货架ID
+	private String shelves;// 货架
 	private Long number;// 库存数量
 
 	public Integer getGoodsID() {
@@ -64,6 +67,30 @@ public class Storage {
 		this.repositoryID = repositoryID;
 	}
 
+	public String getRepository() {
+		return repository;
+	}
+
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
+
+	public Integer getShelvesID() {
+		return shelvesID;
+	}
+
+	public void setShelvesID(Integer shelvesID) {
+		this.shelvesID = shelvesID;
+	}
+
+	public String getShelves() {
+		return shelves;
+	}
+
+	public void setShelves(String shelves) {
+		this.shelves = shelves;
+	}
+
 	public Long getNumber() {
 		return number;
 	}
@@ -75,8 +102,8 @@ public class Storage {
 	@Override
 	public String toString() {
 		return "Storage [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsSize=" + goodsSize + ", goodsType="
-				+ goodsType + ", goodsValue=" + goodsValue + ", repositoryID=" + repositoryID + ", number=" + number
-				+ "]";
+				+ goodsType + ", goodsValue=" + goodsValue + ", repositoryID=" + repositoryID + ", repository=" + repository
+				+ ", shelvesID=" + shelvesID + ", shelves=" + shelves + ", number=" + number + "]";
 	}
 
 }

@@ -12,6 +12,7 @@ public class Goods {
 	private String size;// 货物规格
 	private Double value;// 货物价值
 	private Integer categoryId;
+	private String category;
 
 	public Integer getId() {
 		return id;
@@ -51,6 +52,14 @@ public class Goods {
 
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	@Override

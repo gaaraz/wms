@@ -3,6 +3,8 @@ package com.jianyun.wms.common.service.Impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianyun.wms.dao.GoodsMapper;
+import com.jianyun.wms.dao.ShelvesMapper;
+import com.jianyun.wms.domain.Shelves;
 import com.jianyun.wms.util.aop.UserOperation;
 import com.jianyun.wms.common.service.Interface.StorageManageService;
 import com.jianyun.wms.common.util.ExcelUtil;
@@ -12,6 +14,7 @@ import com.jianyun.wms.domain.Goods;
 import com.jianyun.wms.domain.Repository;
 import com.jianyun.wms.domain.Storage;
 import com.jianyun.wms.exception.StorageManageServiceException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class StorageManageServiceImpl implements StorageManageService {
     @Autowired
     private RepositoryMapper repositoryMapper;
     @Autowired
+    private ShelvesMapper shelvesMapper;
+    @Autowired
     private ExcelUtil excelUtil;
 
     /**
@@ -46,8 +51,8 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectAll(Integer repository) throws StorageManageServiceException {
-        return selectAll(repository, -1, -1);
+    public Map<String, Object> selectAll(Integer repository, Integer shelvesID) throws StorageManageServiceException {
+        return selectAll(repository, shelvesID, -1, -1);
     }
 
     /**
@@ -58,7 +63,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectAll(Integer repositoryID, int offset, int limit) throws StorageManageServiceException {
+    public Map<String, Object> selectAll(Integer repositoryID, Integer shelvesID, int offset, int limit) throws StorageManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
@@ -73,14 +78,14 @@ public class StorageManageServiceImpl implements StorageManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                storageList = storageMapper.selectAllAndRepositoryID(repositoryID);
+                storageList = storageMapper.selectAllAndRepositoryID(repositoryID,shelvesID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
                 } else
                     storageList = new ArrayList<>();
             } else {
-                storageList = storageMapper.selectAllAndRepositoryID(repositoryID);
+                storageList = storageMapper.selectAllAndRepositoryID(repositoryID,shelvesID);
                 if (storageList != null)
                     total = storageList.size();
                 else
@@ -102,8 +107,8 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByGoodsID(Integer goodsID, Integer repository) throws StorageManageServiceException {
-        return selectByGoodsID(goodsID, repository, -1, -1);
+    public Map<String, Object> selectByGoodsID(Integer goodsID, Integer repository, Integer shelvesID) throws StorageManageServiceException {
+        return selectByGoodsID(goodsID, repository, shelvesID, -1, -1);
     }
 
     /**
@@ -115,7 +120,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID, int offset, int limit) throws StorageManageServiceException {
+    public Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID, Integer shelvesID, int offset, int limit) throws StorageManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
@@ -130,14 +135,14 @@ public class StorageManageServiceImpl implements StorageManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
+                storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID, shelvesID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
                 } else
                     storageList = new ArrayList<>();
             } else {
-                storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
+                storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID, shelvesID);
                 if (storageList != null)
                     total = storageList.size();
                 else
@@ -159,8 +164,8 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByGoodsName(String goodsName, Integer repository) throws StorageManageServiceException {
-        return selectByGoodsName(goodsName, repository, -1, -1);
+    public Map<String, Object> selectByGoodsName(String goodsName, Integer repository, Integer shelvesID) throws StorageManageServiceException {
+        return selectByGoodsName(goodsName, repository, shelvesID, -1, -1);
     }
 
     /**
@@ -172,7 +177,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, int offset, int limit) throws StorageManageServiceException {
+    public Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, Integer shelvesID, int offset, int limit) throws StorageManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
@@ -187,14 +192,14 @@ public class StorageManageServiceImpl implements StorageManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName, repositoryID);
+                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName, repositoryID, shelvesID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
                 } else
                     storageList = new ArrayList<>();
             } else {
-                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName, repositoryID);
+                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName, repositoryID, shelvesID);
                 if (storageList != null)
                     total = storageList.size();
                 else
@@ -276,21 +281,24 @@ public class StorageManageServiceImpl implements StorageManageService {
      */
     @UserOperation(value = "添加库存记录")
     @Override
-    public boolean addNewStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean addNewStorage(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException {
         try {
             boolean isAvailable = true;
 
             // validate
             Goods goods = goodsMapper.selectById(goodsID);
             Repository repository = repositoryMapper.selectByID(repositoryID);
+            Shelves shelves = shelvesMapper.selectById(shelvesID);
             if (goods == null)
                 isAvailable = false;
             if (repository == null)
                 isAvailable = false;
+            if (shelves == null)
+                isAvailable = false;
             if (number < 0)
                 isAvailable = false;
-            List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
-            if (!(storageList != null && storageList.isEmpty()))
+            List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID,shelvesID);
+            if (CollectionUtils.isNotEmpty(storageList))
                 isAvailable = false;
 
             if (isAvailable) {
@@ -298,6 +306,7 @@ public class StorageManageServiceImpl implements StorageManageService {
                 Storage storage = new Storage();
                 storage.setGoodsID(goodsID);
                 storage.setRepositoryID(repositoryID);
+                storage.setShelvesID(shelvesID);
                 storage.setNumber(number);
                 storageMapper.insert(storage);
             }
@@ -318,13 +327,13 @@ public class StorageManageServiceImpl implements StorageManageService {
      */
     @UserOperation(value = "修改库存记录")
     @Override
-    public boolean updateStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean updateStorage(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException {
         try {
             boolean isUpdate = false;
 
             // validate
-            List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
-            if (storageList != null && !storageList.isEmpty()) {
+            List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID, shelvesID);
+            if (CollectionUtils.isNotEmpty(storageList)) {
                 if (number >= 0) {
                     // update
                     Storage storage = storageList.get(0);
@@ -350,15 +359,15 @@ public class StorageManageServiceImpl implements StorageManageService {
      */
     @UserOperation(value = "删除库存记录")
     @Override
-    public boolean deleteStorage(Integer goodsID, Integer repositoryID) throws StorageManageServiceException {
+    public boolean deleteStorage(Integer goodsID, Integer repositoryID, Integer shelvesID) throws StorageManageServiceException {
         try {
             boolean isDelete = false;
 
             // validate
-            List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
-            if (storageList != null && !storageList.isEmpty()) {
+            List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID,shelvesID);
+            if (CollectionUtils.isNotEmpty(storageList)) {
                 // delete
-                storageMapper.deleteByRepositoryIDAndGoodsID(goodsID, repositoryID);
+                storageMapper.deleteByRepositoryIDAndGoodsID(goodsID, repositoryID,shelvesID);
                 isDelete = true;
             }
 
@@ -406,7 +415,7 @@ public class StorageManageServiceImpl implements StorageManageService {
                         isAvailable = false;
                     if (storage.getNumber() < 0)
                         isAvailable = false;
-                    List<Storage> temp = storageMapper.selectByGoodsIDAndRepositoryID(storage.getGoodsID(), storage.getRepositoryID());
+                    List<Storage> temp = storageMapper.selectByGoodsIDAndRepositoryID(storage.getGoodsID(), storage.getRepositoryID(),storage.getShelvesID());
                     if (!(temp != null && temp.isEmpty()))
                         isAvailable = false;
 
@@ -452,7 +461,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 返回一个 boolean 值，若值为true表示数目增加成功，否则表示增加失败
      */
     @Override
-    public boolean storageIncrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean storageIncrease(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException {
 
         // 检查货物库存增加数目的有效性
         if (number < 0)
@@ -460,12 +469,12 @@ public class StorageManageServiceImpl implements StorageManageService {
 
         synchronized (this) {
             // 检查对应的库存记录是否存在
-            Storage storage = getStorage(goodsID, repositoryID);
+            Storage storage = getStorage(goodsID, repositoryID,shelvesID);
             if (storage != null) {
                 long newStorage = storage.getNumber() + number;
-                updateStorage(goodsID, repositoryID, newStorage);
+                updateStorage(goodsID, repositoryID, shelvesID, newStorage);
             } else {
-                addNewStorage(goodsID, repositoryID, number);
+                addNewStorage(goodsID, repositoryID, shelvesID, number);
             }
         }
         return true;
@@ -480,18 +489,18 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @return 返回一个 boolean 值，若值为 true 表示数目减少成功，否则表示减少失败
      */
     @Override
-    public boolean storageDecrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean storageDecrease(Integer goodsID, Integer repositoryID, Integer shelvesID, long number) throws StorageManageServiceException {
 
         synchronized (this) {
             // 检查对应的库存记录是否存在
-            Storage storage = getStorage(goodsID, repositoryID);
+            Storage storage = getStorage(goodsID, repositoryID, shelvesID);
             if (null != storage) {
                 // 检查库存减少数目的范围是否合理
                 if (number < 0 || storage.getNumber() < number)
                     return false;
 
                 long newStorage = storage.getNumber() - number;
-                updateStorage(goodsID, repositoryID, newStorage);
+                updateStorage(goodsID, repositoryID, shelvesID, newStorage);
                 return true;
             } else
                 return false;
@@ -505,9 +514,9 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @param repositoryID 仓库ID
      * @return 若存在则返回对应的记录，否则返回null
      */
-    private Storage getStorage(Integer goodsID, Integer repositoryID) {
+    private Storage getStorage(Integer goodsID, Integer repositoryID, Integer shelvesID) {
         Storage storage = null;
-        List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
+        List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID,shelvesID);
         if (!storageList.isEmpty())
             storage = storageList.get(0);
         return storage;

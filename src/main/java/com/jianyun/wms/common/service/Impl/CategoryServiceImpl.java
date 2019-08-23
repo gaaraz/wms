@@ -8,13 +8,13 @@ import com.jianyun.wms.dao.GoodsMapper;
 import com.jianyun.wms.domain.Category;
 import com.jianyun.wms.domain.Goods;
 import com.jianyun.wms.exception.BusinessException;
+import com.jianyun.wms.util.aop.UserOperation;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
         return resultSet;
     }
 
+    @UserOperation(value = "添加分类信息")
     @Override
     public boolean addCategory(Category category) throws BusinessException {
         try {
@@ -87,6 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @UserOperation(value = "删除分类信息")
     @Override
     public boolean deleteCategory(Integer id) throws BusinessException {
         try {
@@ -101,6 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @UserOperation(value = "更新分类信息")
     @Override
     public boolean updateCategory(Category category) throws BusinessException {
         try {

@@ -8,6 +8,7 @@ package com.jianyun.wms.domain;
 public class Repository {
 
 	private Integer id;// 仓库ID
+	private String name;
 	private String address;// 仓库地址
 	private String status;// 仓库状态
 	private String area;// 仓库面积
@@ -53,6 +54,14 @@ public class Repository {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getAddress() {

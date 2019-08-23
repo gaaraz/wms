@@ -13,6 +13,9 @@
 		<result property="goodsType" column="goodsType"/>
 		<result property="goodsValue" column="goodsValue"/>
 		<result property="repositoryID" column="repositoryID"/>
+		<result property="repository" column="repository" />
+		<result property="shelvesID" column="shelvesID" />
+		<result property="shelves" column="shelves" />
 		<result property="number" column="number"/>
 		<!-- 
 		<association property="goodsInfo" javaType="com.jianyun.Goods" resultMap="goods"/>
@@ -31,61 +34,98 @@
 	 
 	<select id="selectAllAndRepositoryID" resultMap="storage">
 		select
-			r.REPO_ID as repositoryID,
+			s.RECORD_REPOSITORY as repositoryID,
+			r.REPO_NAME as repository,
+			s.RECORD_SHELVES as shelvesID,
+			ss.SHELVES_NAME as shelves,
 			s.RECORD_NUMBER as number,
 			g.GOOD_ID as goodsID,
 			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
 			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOOD_VALUE as goodsValue,
+			c.CATEGORY_NAME as goodsType
 		from
-			wms_record_storage s,wms_respository r, wms_goods g
-		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
-		 	s.RECORD_REPOSITORY = r.REPO_ID
-		 	<if test="repositoryID != null">
-		 		and r.REPO_ID = #{repositoryID}
-		 	</if>
+			wms_record_storage s
+		LEFT JOIN wms_respository r
+		ON s.RECORD_REPOSITORY = r.REPO_ID
+		LEFT JOIN wms_goods g
+		ON s.RECORD_GOODID = g.GOOD_ID
+		LEFT JOIN wms_shelves ss
+		ON s.RECORD_SHELVES = ss.SHELVES_ID
+		LEFT JOIN wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
+		<where>
+			<if test="repositoryID != null and repositoryID != ''">
+				and s.RECORD_REPOSITORY = #{repositoryID}
+			</if>
+			<if test="shelvesID != null and shelvesID != ''">
+				and s.RECORD_SHELVES = #{shelvesID}
+			</if>
+		</where>
 	</select>
 	
 	<select id="selectByGoodsIDAndRepositoryID" resultMap="storage">
 		select
-			r.REPO_ID as repositoryID,
+			s.RECORD_REPOSITORY as repositoryID,
+			r.REPO_NAME as repository,
+			s.RECORD_SHELVES as shelvesID,
+			ss.SHELVES_NAME as shelves,
 			s.RECORD_NUMBER as number,
 			g.GOOD_ID as goodsID,
 			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
 			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOOD_VALUE as goodsValue,
+			c.CATEGORY_NAME as goodsType
 		from
-			wms_record_storage s,wms_respository r, wms_goods g
+			wms_record_storage s
+		LEFT JOIN wms_respository r
+		ON s.RECORD_REPOSITORY = r.REPO_ID
+		LEFT JOIN wms_goods g
+		ON s.RECORD_GOODID = g.GOOD_ID
+		LEFT JOIN wms_shelves ss
+		ON s.RECORD_SHELVES = ss.SHELVES_ID
+		LEFT JOIN wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
 		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
-		 	s.RECORD_REPOSITORY = r.REPO_ID and
-		 	g.GOOD_ID = #{goodsID}
-		 	<if test="repositoryID != null">
-		 		and r.REPO_ID = #{repositoryID}
+			s.RECORD_GOODID = #{goodsID}
+		 	<if test="repositoryID != null and repositoryID != ''">
+		 		and s.RECORD_REPOSITORY = #{repositoryID}
 		 	</if>
+			<if test="shelvesID != null and shelvesID != ''">
+				and s.RECORD_SHELVES = #{shelvesID}
+			</if>
 	</select>
 	
 	<select id="selectByGoodsNameAndRepositoryID" resultMap="storage">
 		select
-			r.REPO_ID as repositoryID,
+			s.RECORD_REPOSITORY as repositoryID,
+			r.REPO_NAME as repository,
+			s.RECORD_SHELVES as shelvesID,
+			ss.SHELVES_NAME as shelves,
 			s.RECORD_NUMBER as number,
 			g.GOOD_ID as goodsID,
 			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
 			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOOD_VALUE as goodsValue,
+			c.CATEGORY_NAME as goodsType
 		from
-			wms_record_storage s,wms_respository r, wms_goods g
+			wms_record_storage s
+		LEFT JOIN wms_respository r
+		ON s.RECORD_REPOSITORY = r.REPO_ID
+		LEFT JOIN wms_goods g
+		ON s.RECORD_GOODID = g.GOOD_ID
+		LEFT JOIN wms_shelves ss
+		ON s.RECORD_SHELVES = ss.SHELVES_ID
+		LEFT JOIN wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
 		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
-		 	s.RECORD_REPOSITORY = r.REPO_ID and
 		 	g.GOOD_NAME like concat("%",concat(#{goodsName},"%"))
-		 	<if test="repositoryID != null">
-		 		and r.REPO_ID = #{repositoryID}
+		 	<if test="repositoryID != null and repositoryID != ''">
+				and s.RECORD_REPOSITORY = #{repositoryID}
 		 	</if>
+			<if test="shelvesID != null and shelvesID != ''">
+				and s.RECORD_SHELVES = #{shelvesID}
+			</if>
 	</select>
 	
 	<select id="selectByGoodsTypeAndRepositoryID" resultMap="storage">
@@ -112,12 +152,11 @@
 		update 
 			wms_record_storage
 		set
-			RECORD_GOODID = #{goodsID},
-			RECORD_REPOSITORY = #{repositoryID},
 			RECORD_NUMBER = #{number}
 		where
-			RECORD_GOODID = #{goodsID} and
-			RECORD_REPOSITORY = #{repositoryID}
+			RECORD_GOODID = #{goodsID}
+			and RECORD_REPOSITORY = #{repositoryID}
+			and RECORD_SHELVES = #{shelvesID}
 	</update>
 	
 	<insert id="insert">
@@ -125,44 +164,34 @@
 		(
 			RECORD_GOODID,
 			RECORD_REPOSITORY,
+			RECORD_SHELVES,
 			RECORD_NUMBER
 		)
 		values
 		(
 			#{goodsID},
 			#{repositoryID},
+			#{shelvesID},
 			#{number}
 		)
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_record_storage(RECORD_GOODID,RECORD_REPOSITORY,RECORD_NUMBER)
+		insert into wms_record_storage(RECORD_GOODID,RECORD_REPOSITORY,RECORD_SHELVES,RECORD_NUMBER)
 		values
 		<foreach collection="list" item="storage" separator=",">
 			(
-			#{storage.goodsID},#{storage.repositoryID},#{storage.number})
+			#{storage.goodsID},#{storage.repositoryID},#{storage.shelvesID},#{storage.number})
 		</foreach>
 	</insert>
-	
-	<delete id="deleteByGoodsID">
-		delete from 
-			wms_record_storage
-		where
-			RECORD_GOODID = #{goodsID}
-	</delete>
-	
-	<delete id="deleteByRepositoryID">
-		delete from
-			wms_record_storage
-		where
-			wms_record_storage.RECORD_REPOSITORY = #{repositoryID}
-	</delete>
+
 	
 	<delete id="deleteByRepositoryIDAndGoodsID">
 		delete from
 			wms_record_storage
 		where
 			RECORD_GOODID = #{goodsID} and
-			wms_record_storage.RECORD_REPOSITORY = #{repositoryID}
+			RECORD_REPOSITORY = #{repositoryID} and
+			RECORD_SHELVES = #{shelvesID}
 	</delete>
 </mapper>

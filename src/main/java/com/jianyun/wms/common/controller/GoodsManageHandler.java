@@ -4,7 +4,6 @@ import com.jianyun.wms.common.service.Interface.GoodsManageService;
 import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.Goods;
-import com.jianyun.wms.domain.Supplier;
 import com.jianyun.wms.exception.GoodsManageServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,15 +86,39 @@ public class GoodsManageHandler {
                                      @RequestParam("keyWord") String keyWord) throws GoodsManageServiceException {
         // 初始化 Response
         Response responseContent = responseUtil.newResponseInstance();
-        List<Supplier> rows = null;
+        List<Goods> rows = null;
         long total = 0;
 
         // 查询
         Map<String, Object> queryResult = query(searchType, keyWord, offset, limit);
 
         if (queryResult != null) {
-            rows = (List<Supplier>) queryResult.get("data");
+            rows = (List<Goods>) queryResult.get("data");
             total = (long) queryResult.get("total");
+        }
+
+        // 设置 Response
+        responseContent.setCustomerInfo("rows", rows);
+        responseContent.setResponseTotal(total);
+        return responseContent.generateResponse();
+    }
+
+
+    @RequestMapping(value = "getGoodsListByShelvesId", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> getGoodsListByShelvesId(@RequestParam("shelvesId") String shelvesId) throws GoodsManageServiceException {
+        // 初始化 Response
+        Response responseContent = responseUtil.newResponseInstance();
+        List<Goods> rows = null;
+        Integer total = 0;
+
+        // 查询
+        Map<String, Object> queryResult = goodsManageService.getGoodsListByShelvesId(Integer.parseInt(shelvesId));
+
+        if (queryResult != null) {
+            rows = (List<Goods>) queryResult.get("data");
+            total = (Integer) queryResult.get("total");
         }
 
         // 设置 Response

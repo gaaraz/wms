@@ -29,9 +29,6 @@
 			} else if (type == "货物名称") {
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsName";
-			} else if(type = "货物类型"){
-				$("#search_input_type").removeAttr("readOnly");
-				search_type_storage = "searchByGoodsType";
 			}else {
 				$("#search_input_type").removeAttr("readOnly");
 			}

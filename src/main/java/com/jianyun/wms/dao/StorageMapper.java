@@ -19,7 +19,8 @@ public interface StorageMapper {
 	 * 选择所有的库存信息
 	 * @return 返回所有的库存信息
 	 */
-	List<Storage> selectAllAndRepositoryID(@Param("repositoryID") Integer repositoryID);
+	List<Storage> selectAllAndRepositoryID(@Param("repositoryID") Integer repositoryID,
+										   @Param("shelvesID") Integer shelvesID);
 	
 	/**
 	 * 选择指定货物ID和仓库ID的库存信息
@@ -28,7 +29,8 @@ public interface StorageMapper {
 	 * @return 返回所有指定货物ID和仓库ID的库存信息
 	 */
 	List<Storage> selectByGoodsIDAndRepositoryID(@Param("goodsID") Integer goodsID,
-												 @Param("repositoryID") Integer repositoryID);
+												 @Param("repositoryID") Integer repositoryID,
+												 @Param("shelvesID") Integer shelvesID);
 	
 	/**
 	 * 选择指定货物名的库存信息
@@ -36,7 +38,8 @@ public interface StorageMapper {
 	 * @return 返回所有指定货物名称的库存信息
 	 */
 	List<Storage> selectByGoodsNameAndRepositoryID(@Param("goodsName") String goodsName,
-												   @Param("repositoryID") Integer repositoryID);
+												   @Param("repositoryID") Integer repositoryID,
+												   @Param("shelvesID") Integer shelvesID);
 	
 	/**
 	 * 选择指定货物类型的库存信息
@@ -82,5 +85,7 @@ public interface StorageMapper {
 	 * @param goodsID 货物ID
 	 * @param repositoryID 仓库ID
 	 */
-	void deleteByRepositoryIDAndGoodsID(@Param("goodsID") Integer goodsID, @Param("repositoryID") Integer repositoryID);
+	void deleteByRepositoryIDAndGoodsID(@Param("goodsID") Integer goodsID,
+										@Param("repositoryID") Integer repositoryID,
+										@Param("shelvesID") Integer shelvesID);
 }

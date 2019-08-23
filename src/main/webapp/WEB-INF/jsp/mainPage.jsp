@@ -102,6 +102,10 @@ pageEncoding="UTF-8"%>
                                            name="pagecomponent/stockRecordManagement.html">出入库记录</a>
                                     </li>
                                 </shiro:hasRole>
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/checkRecordManagement.jsp">盘点</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -201,6 +205,10 @@ pageEncoding="UTF-8"%>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
                                            name="pagecomponent/repositoryManagement.jsp">仓库信息管理</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item"
+                                           name="pagecomponent/shelvesManagement.jsp">货架信息管理</a>
                                     </li>
                                 </ul>
                             </div>

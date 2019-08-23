@@ -40,6 +40,15 @@ public class StockInDO {
      */
     private Integer repositoryID;
 
+    private String repository;
+
+    /**
+     * 入库货架ID
+     */
+    private Integer shelvesID;
+
+    private String shelves;
+
     /**
      * 入库数量
      */
@@ -54,6 +63,32 @@ public class StockInDO {
      * 入库经手人
      */
     private String personInCharge;
+
+
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    public String getShelves() {
+        return shelves;
+    }
+
+    public void setShelves(String shelves) {
+        this.shelves = shelves;
+    }
+
+    public Integer getShelvesID() {
+        return shelvesID;
+    }
+
+    public void setShelvesID(Integer shelvesID) {
+        this.shelvesID = shelvesID;
+    }
 
     public Integer getRepositoryID() {
         return repositoryID;

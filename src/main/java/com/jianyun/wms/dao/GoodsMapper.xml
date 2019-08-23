@@ -11,6 +11,7 @@
 		<result property="size" column="GOOD_SIZE"/>
 		<result property="value" column="GOOD_VALUE"/>
 		<result property="categoryId" column="CATEGORY_ID" />
+		<result property="category" column="CATEGORY_NAME" />
 	</resultMap>
 	
 	<select id="selectAll" resultMap="goods">
@@ -19,9 +20,13 @@
 			g.GOOD_NAME,
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
-			g.CATEGORY_ID
+			g.CATEGORY_ID,
+			c.CATEGORY_NAME
 		from 
 			wms_goods g
+		LEFT JOIN
+			wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
 	</select>
 	
 	<select id="selectById" resultMap="goods">
@@ -30,11 +35,34 @@
 			g.GOOD_NAME,
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
-			g.CATEGORY_ID
-		from 
+			g.CATEGORY_ID,
+			c.CATEGORY_NAME
+		from
 			wms_goods g
+		LEFT JOIN
+			wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
 		where
 			g.GOOD_ID = #{id}
+	</select>
+
+	<select id="selectByIds" resultMap="goods">
+		select
+		g.GOOD_ID,
+		g.GOOD_NAME,
+		g.GOOD_SIZE,
+		g.GOOD_VALUE,
+		g.CATEGORY_ID,
+		c.CATEGORY_NAME
+		from
+		wms_goods g
+		LEFT JOIN
+		wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
+		where g.GOOD_ID IN
+			<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
 	</select>
 	
 	<select id="selectByName" resultMap="goods">
@@ -43,9 +71,13 @@
 			g.GOOD_NAME,
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
-			g.CATEGORY_ID
-		from 
+			g.CATEGORY_ID,
+			c.CATEGORY_NAME
+		from
 			wms_goods g
+		LEFT JOIN
+			wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
 		where
 			g.GOOD_NAME = #{goodsName}
 	</select>
@@ -56,9 +88,13 @@
 			g.GOOD_NAME,
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
-			g.CATEGORY_ID
-		from 
+			g.CATEGORY_ID,
+			c.CATEGORY_NAME
+		from
 			wms_goods g
+		LEFT JOIN
+			wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
 		where
 			g.GOOD_NAME like concat(concat('%',#{goodsName}),'%')
 	</select>
