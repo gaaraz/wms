@@ -48,6 +48,11 @@ pageEncoding="UTF-8"%>
                                     <a href="#" id="editInfo"> <span
                                             class="glyphicon glyphicon-pencil"></span> &nbsp;&nbsp;修改个人信息</a></li>
                             </shiro:hasRole>
+                            <shiro:hasRole name="systemAdmin">
+                                <li>
+                                    <a href="#">新的消息<span class="badge">42</span></a>
+                                </li>
+                            </shiro:hasRole>
                             <li>
                                 <a href="javascript:void(0)" id="signOut"> <span
                                         class="glyphicon glyphicon-off"></span> &nbsp;&nbsp;注销登录
@@ -244,6 +249,29 @@ pageEncoding="UTF-8"%>
                         </div>
                     </div>
                 </div>
+                <shiro:hasRole name="systemAdmin">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a href="#collapse6" data-toggle="collapse" data-parent="#accordion"
+                                   class="parentMenuTitle collapseHead">数据分析</a>
+                                <div class="pull-right	">
+                                    <span class="caret"></span>
+                                </div>
+                            </h4>
+                        </div>
+                        <div id="collapse6" class="panel-collapse collapse collapseBody">
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item"
+                                           name="pagecomponent/statisticsManagement.jsp">货物出库分析</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </shiro:hasRole>
             </div>
         </div>
 

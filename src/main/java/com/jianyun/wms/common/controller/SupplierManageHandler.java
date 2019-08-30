@@ -1,10 +1,11 @@
 package com.jianyun.wms.common.controller;
 
-import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.service.Interface.SupplierManageService;
+import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.Supplier;
 import com.jianyun.wms.exception.SupplierManageServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -242,7 +243,7 @@ public class SupplierManageHandler {
     public void exportSupplier(@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
                                HttpServletResponse response) throws SupplierManageServiceException, IOException {
 
-        String fileName = "supplierInfo.xlsx";
+        String fileName = "supplierInfo"+ TimeUtil.getTodayDate()+".xlsx";
 
         // 根据查询类型进行查询
         List<Supplier> suppliers = null;

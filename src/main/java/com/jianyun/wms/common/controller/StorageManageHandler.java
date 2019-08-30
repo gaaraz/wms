@@ -1,11 +1,12 @@
 package com.jianyun.wms.common.controller;
 
+import com.jianyun.wms.common.service.Interface.StockRecordManageService;
 import com.jianyun.wms.common.service.Interface.StorageManageService;
 import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.util.ResponseUtil;
-import com.jianyun.wms.exception.StorageManageServiceException;
-import com.jianyun.wms.common.service.Interface.StockRecordManageService;
 import com.jianyun.wms.domain.Storage;
+import com.jianyun.wms.exception.StorageManageServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -335,12 +336,12 @@ public class StorageManageHandler {
                                     @RequestParam(value = "repositoryBelong", required = false) String repositoryBelong,
                                     @RequestParam(value = "shelvesBelong", required = false) String shelvesBelong,
                                     HttpServletRequest request, HttpServletResponse response) throws StorageManageServiceException, IOException {
-        String fileName = "storageRecord.xlsx";
+        String fileName = "storageRecord"+ TimeUtil.getTodayDate()+".xlsx";
 
         HttpSession session = request.getSession();
-        Integer sessionRepositoryBelong = (Integer) session.getAttribute("repositoryBelong");
+        String sessionRepositoryBelong = (String) session.getAttribute("repositoryBelong");
         if (sessionRepositoryBelong != null && !sessionRepositoryBelong.equals("none"))
-            repositoryBelong = sessionRepositoryBelong.toString();
+            repositoryBelong = sessionRepositoryBelong;
 
         List<Storage> storageList = null;
         Map<String, Object> queryResult = query(searchType, keyword, repositoryBelong, shelvesBelong, -1, -1);

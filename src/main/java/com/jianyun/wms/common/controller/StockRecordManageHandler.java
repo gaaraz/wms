@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 商品出入库管理请求Handler
@@ -146,6 +145,37 @@ public class StockRecordManageHandler {
 
         responseContent.setCustomerInfo("rows", rows);
         responseContent.setResponseTotal(total);
+        return responseContent.generateResponse();
+    }
+
+
+    @RequestMapping(value = "queryStatisticalData", method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> queryStatisticalData(@RequestParam("goodID") String goodID,
+                                                                  @RequestParam("startDate") String startDate,
+                                                                  @RequestParam("endDate") String endDate) throws Exception{
+        Response responseContent = responseUtil.newResponseInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        if (StringUtils.isBlank(endDate)){
+            endDate = sdf.format(new Date());
+        }
+
+        if (StringUtils.isBlank(startDate)){
+            Date endDateObj = sdf.parse(endDate);
+            Calendar startDateCal = Calendar.getInstance();
+            startDateCal.setTime(endDateObj);
+            startDateCal.add(Calendar.MONTH,-11);
+            startDate = sdf.format(startDateCal.getTime());
+        }
+
+        Integer goodId = null;
+        if (StringUtils.isNotBlank(goodID) && StringUtils.isNumeric(goodID)){
+            goodId = Integer.parseInt(goodID);
+        }
+
+        Map<String, Object> resultMap = stockRecordManageService.queryStatisticalData(goodId, startDate, endDate);
+
+        responseContent.setCustomerInfo("rows", resultMap.get("data"));
+        responseContent.setResponseTotal((Integer)resultMap.get("total"));
         return responseContent.generateResponse();
     }
 }

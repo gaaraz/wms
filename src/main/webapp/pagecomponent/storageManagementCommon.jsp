@@ -2,15 +2,21 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_storage = "none";
-	var search_keyWord = "";
-	var select_goodsID;
-	var select_repositoryID;
+    var search_type_storage = "none";
+    var search_keyWord = "";
+    var search_repository = "";
+    var search_shelves = "";
+    var select_goodsID;
+    var select_repositoryID;
+    var select_shelvesID;
 
 	$(function() {
-		optionAction();
-		searchAction();
-		storageListInit();
+        optionAction();
+        searchAction();
+        storageListInit();
+        bootstrapValidatorInit();
+        repositoryOptionInit();
+        shelvesOptionInit();
 
 		exportStorageAction()
 	})
@@ -38,91 +44,162 @@
 		})
 	}
 
-	// 搜索动作
-	function searchAction() {
-		$('#search_button').click(function() {
-			search_keyWord = $('#search_input_type').val();
-			tableRefresh();
-		})
-	}
+    // 仓库下拉框数据初始化，页面加载时完成
+    function repositoryOptionInit(){
+        $.ajax({
+            type : 'GET',
+            url : 'repositoryManage/getRepositoryList',
+            dataType : 'json',
+            contentType : 'application/json',
+            data:{
+                searchType : "searchAll",
+                keyWord : "",
+                offset : -1,
+                limit : -1
+            },
+            success : function(response){
+                //组装option
+                $.each(response.rows,function(index,elem){
+                    $('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+                })
+            },
+            error : function(response){
+            }
+        });
+        $('#search_input_repository').append("<option value='all'>请选择仓库</option>");
+    }
 
-	// 分页查询参数
-	function queryParams(params) {
-		var temp = {
-			limit : params.limit,
-			offset : params.offset,
-			searchType : search_type_storage,
-			keyword : search_keyWord
-		}
-		return temp;
-	}
+    // 仓库下拉框数据初始化，页面加载时完成
+    function shelvesOptionInit(){
+        $('#search_input_repository').change(function(){
+            var reposId = $(this).val();
+            $('#search_input_shelves').empty();
+            $.ajax({
+                type : 'GET',
+                url : 'shelvesManage/list',
+                dataType : 'json',
+                contentType : 'application/json',
+                data:{
+                    searchType : "searchByRepos",
+                    keyWord : reposId,
+                    offset : -1,
+                    limit : -1
+                },
+                success : function(response){
+                    //组装option
+                    $.each(response.rows,function(index,elem){
+                        $('#search_input_shelves').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+                    })
+                },
+                error : function(response){
+                }
+            });
+            $('#search_input_shelves').append("<option value='all'>请选择货架</option>");
+        });
+    }
 
-	// 表格初始化
-	function storageListInit() {
-		$('#storageList')
-				.bootstrapTable(
-						{
-							columns : [
-									{
-										field : 'goodsID',
-										title : '货物ID'
-									//sortable: true
-									},
-									{
-										field : 'goodsName',
-										title : '货物名称'
-									},
-									{
-										field : 'goodsType',
-										title : '货物类型'
-									},
-									{
-										field : 'goodsSize',
-										title : '货物尺寸',
-										visible : false
-									},
-									{
-										field : 'goodsValue',
-										title : '货物价值',
-										visible : false
-									},
-									{
-										field : 'repositoryID',
-										title : '仓库ID',
-										visible : false
-									},
-									{
-										field : 'number',
-										title : '库存数量'
-									},
-									{
-										field : 'operation',
-										title : '操作',
-										formatter : function(value, row, index) {
-											var s = '<button class="btn btn-info btn-sm edit"><span>详细</span></button>';
-											var fun = '';
-											return s;
-										},
-										events : {
-											// 操作列中编辑按钮的动作
-											'click .edit' : function(e, value,
-													row, index) {
-												rowDetailOperation(row);
-											}
-										}
-									} ],
-							url : 'storageManage/getStorageList',
-							method : 'GET',
-							queryParams : queryParams,
-							sidePagination : "server",
-							dataType : 'json',
-							pagination : true,
-							pageNumber : 1,
-							pageSize : 5,
-							pageList : [ 5, 10, 25, 50, 100 ],
-							clickToSelect : true
-						});
-	}
+    // 搜索动作
+    function searchAction() {
+        $('#search_button').click(function() {
+            search_keyWord = $('#search_input_type').val();
+            search_repository = $('#search_input_repository').val();
+            search_shelves = $('#search_input_shelves').val();
+            tableRefresh();
+        })
+    }
+
+    // 分页查询参数
+    function queryParams(params) {
+        var temp = {
+            limit : params.limit,
+            offset : params.offset,
+            searchType : search_type_storage,
+            repositoryBelong : search_repository,
+            shelvesBelong : search_shelves,
+            keyword : search_keyWord
+        }
+        return temp;
+    }
+
+    // 表格初始化
+    function storageListInit() {
+        $('#storageList')
+            .bootstrapTable(
+                {
+                    columns : [
+                        {
+                            field : 'goodsID',
+                            title : '货物ID'
+                            //sortable: true
+                        },
+                        {
+                            field : 'goodsName',
+                            title : '货物名称'
+                        },
+                        {
+                            field : 'goodsType',
+                            title : '货物类型'
+                        },
+                        {
+                            field : 'goodsSize',
+                            title : '货物尺寸',
+                            visible : false
+                        },
+                        {
+                            field : 'goodsValue',
+                            title : '货物价值',
+                            visible : false
+                        },
+                        {
+                            field : 'repository',
+                            title : '仓库'
+                        },
+                        {
+                            field : 'shelves',
+                            title : '货架'
+                        },
+                        {
+                            field : 'number',
+                            title : '库存数量'
+                        },
+                        {
+                            field : 'operation',
+                            title : '操作',
+                            formatter : function(value, row, index) {
+                                var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';
+                                var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';
+                                var fun = '';
+                                return s + ' ' + d;
+                            },
+                            events : {
+                                // 操作列中编辑按钮的动作，rowEditOperation(row)，传入row
+                                'click .edit' : function(e, value,
+                                                         row, index) {
+                                    //selectID = row.id;
+                                    rowEditOperation(row);
+                                },
+                                'click .delete' : function(e,
+                                                           value, row, index) {
+                                    select_goodsID = row.goodsID;
+                                    select_repositoryID = row.repositoryID;
+                                    select_shelvesID = row.shelvesID;
+                                    $('#deleteWarning_modal').modal(
+                                        'show');
+                                }
+                            }
+                        } ],
+                    url : 'storageManage/getStorageListWithRepository',
+                    method : 'GET',
+                    queryParams : queryParams,
+                    sidePagination : "server",
+                    dataType : 'json',
+                    pagination : true,
+                    pageNumber : 1,
+                    pageSize : 5,
+                    pageList : [ 5, 10, 25, 50, 100 ],
+                    clickToSelect : true
+                });
+    }
 
 	// 表格刷新
 	function tableRefresh() {
@@ -190,7 +267,6 @@
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0)" class="dropOption">货物ID</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">货物名称</a></li>
-						<li><a href="javascript:void(0)" class="dropOption">货物类型</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -200,6 +276,16 @@
 					<div class="col-md-3 col-sm-3">
 						<input id="search_input_type" type="text" class="form-control"
 							placeholder="货物ID">
+					</div>
+					<!--通过后台查询仓库信息-->
+					<div class="col-md-3 col-sm-4">
+						<select class="form-control" id="search_input_repository">
+						</select>
+					</div>
+					<!--通过后台查询货架信息-->
+					<div class="col-md-3 col-sm-4">
+						<select class="form-control" id="search_input_shelves">
+						</select>
 					</div>
 					<div class="col-md-2 col-sm-2">
 						<button id="search_button" class="btn btn-success">

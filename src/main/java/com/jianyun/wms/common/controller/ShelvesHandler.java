@@ -7,10 +7,16 @@ import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.Goods;
 import com.jianyun.wms.domain.Shelves;
 import com.jianyun.wms.exception.BusinessException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -146,5 +152,55 @@ public class ShelvesHandler {
         // 设置 Response
         responseContent.setResponseResult(result);
         return responseContent.generateResponse();
+    }
+
+
+    @RequestMapping(value = "exportShelves", method = RequestMethod.GET)
+    public void exportShelves(@RequestParam("searchType") String searchType,
+                               @RequestParam("keyWord") String keyWord,
+                               HttpServletResponse response) throws BusinessException, IOException {
+
+        String fileName = "shelvesInfo"+ TimeUtil.getTodayDate()+".xlsx";
+
+        // 根据查询类型进行查询
+        List<Shelves> shelves = null;
+        Map<String, Object> queryResult;
+        queryResult = query(searchType, keyWord, -1, -1);
+
+        if (queryResult != null) {
+            shelves = (List<Shelves>) queryResult.get("data");
+
+            for (Shelves she:shelves){
+                List<String> goodNames = new ArrayList<>();
+                String goodIds = she.getGoodIds();
+                List<String> goodIdsList = Arrays.asList(goodIds.split(","));
+                for(String id:goodIdsList){
+                    Goods good = goodsManageService.selectOneById(Integer.parseInt(id));
+                    goodNames.add(good.getName());
+                }
+                she.setGoodNames(StringUtils.join(goodNames.toArray()," , "));
+            }
+        }
+
+        // 获取生成的文件
+        File file = shelvesService.exportShelves(shelves);
+
+        // 写出文件
+        if (file != null) {
+            // 设置响应头
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            FileInputStream inputStream = new FileInputStream(file);
+            OutputStream outputStream = response.getOutputStream();
+            byte[] buffer = new byte[8192];
+
+            int len;
+            while ((len = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                outputStream.write(buffer, 0, len);
+                outputStream.flush();
+            }
+
+            inputStream.close();
+            outputStream.close();
+        }
     }
 }

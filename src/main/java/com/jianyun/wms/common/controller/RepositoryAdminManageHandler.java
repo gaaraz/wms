@@ -2,9 +2,10 @@ package com.jianyun.wms.common.controller;
 
 import com.jianyun.wms.common.service.Interface.RepositoryAdminManageService;
 import com.jianyun.wms.common.util.Response;
-import com.jianyun.wms.exception.RepositoryAdminManageServiceException;
 import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.RepositoryAdmin;
+import com.jianyun.wms.exception.RepositoryAdminManageServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -256,7 +257,7 @@ public class RepositoryAdminManageHandler {
                                       @RequestParam("keyWord") String keyWord, HttpServletResponse response) throws RepositoryAdminManageServiceException, IOException {
 
         // 导出文件名
-        String fileName = "repositoryAdminInfo.xlsx";
+        String fileName = "repositoryAdminInfo"+ TimeUtil.getTodayDate()+".xlsx";
 
         // 查询
         List<RepositoryAdmin> repositoryAdmins;

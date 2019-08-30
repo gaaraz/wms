@@ -3,6 +3,8 @@ package com.jianyun.wms.common.service.Interface;
 import com.jianyun.wms.domain.Shelves;
 import com.jianyun.wms.exception.BusinessException;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +21,5 @@ public interface ShelvesService {
     boolean addShelves(Shelves shelves) throws BusinessException;
     boolean updateShelves(Shelves shelves) throws BusinessException;
     boolean deleteShelves(Integer id) throws BusinessException;
+    File exportShelves(List<Shelves> shelves);
 }

@@ -2,10 +2,11 @@ package com.jianyun.wms.common.controller;
 
 import com.jianyun.wms.common.service.Interface.SystemLogService;
 import com.jianyun.wms.common.util.Response;
-import com.jianyun.wms.domain.UserOperationRecordDTO;
 import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.AccessRecordDO;
+import com.jianyun.wms.domain.UserOperationRecordDTO;
 import com.jianyun.wms.exception.SystemLogServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -136,5 +143,52 @@ public class SystemLogHandler {
         response.setCustomerInfo("rows", rows);
         response.setResponseTotal(total);
         return response.generateResponse();
+    }
+
+    @RequestMapping(value = "exportSql", method = RequestMethod.GET)
+    public void exportSql(HttpServletResponse response) throws IOException {
+        String fileName = "wms_db_"+ TimeUtil.getCurrentTimeMillis()+".sql";
+
+        // 获取生成的文件
+        File file = systemLogService.exportSql();
+
+        // 写出文件
+        if (file != null) {
+            // 设置响应头
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            FileInputStream inputStream = new FileInputStream(file);
+            OutputStream outputStream = response.getOutputStream();
+            byte[] buffer = new byte[8192];
+
+            int len;
+            while ((len = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                outputStream.write(buffer, 0, len);
+                outputStream.flush();
+            }
+
+            inputStream.close();
+            outputStream.close();
+        }
+    }
+
+    @RequestMapping(value = "importSql", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Map<String, Object> importSql(@RequestParam("file") MultipartFile file) {
+        // 初始化 Response
+        Response responseContent = responseUtil.newResponseInstance();
+        String result = Response.RESPONSE_RESULT_SUCCESS;
+
+        // 读取文件内容
+        if (file == null)
+            result = Response.RESPONSE_RESULT_ERROR;
+        Boolean importInfo = systemLogService.importSql(file);
+        if (!importInfo){
+            result = Response.RESPONSE_RESULT_ERROR;
+        }
+
+        // 设置 Response
+        responseContent.setResponseResult(result);
+        return responseContent.generateResponse();
     }
 }

@@ -5,6 +5,7 @@ import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.Goods;
 import com.jianyun.wms.exception.GoodsManageServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -268,7 +269,7 @@ public class GoodsManageHandler {
     public void exportGoods(@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
                             HttpServletResponse response) throws GoodsManageServiceException, IOException {
 
-        String fileName = "goodsInfo.xlsx";
+        String fileName = "goodsInfo"+ TimeUtil.getTodayDate()+".xlsx";
 
         List<Goods> goodsList = null;
         Map<String, Object> queryResult = query(searchType, keyWord, -1, -1);

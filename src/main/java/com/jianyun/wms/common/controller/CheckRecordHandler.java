@@ -5,13 +5,20 @@ import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.CheckRecord;
 import com.jianyun.wms.exception.BusinessException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,5 +93,71 @@ public class CheckRecordHandler {
         responseContent.setResponseResult(result);
 
         return responseContent.generateResponse();
+    }
+
+    @RequestMapping(value = "exportCheckRecord", method = RequestMethod.GET)
+    public void exportCheckRecord(@RequestParam Map<String,String> params,
+                              HttpServletResponse response) throws BusinessException, IOException {
+
+        String fileName = "checkRecordInfo"+ TimeUtil.getTodayDate()+".xlsx";
+
+        Map<String,Object> paramMap = new HashMap<>();
+        String goodId = params.get("goodId");
+        String repositoryId = params.get("repositoryId");
+        String shelvesId = params.get("shelvesId");
+        String startDate = params.get("startDate");
+        String endDate = params.get("endDate");
+
+        paramMap.put("offset",-1);
+        paramMap.put("limit",-1);
+        paramMap.put("goodId",goodId);
+        paramMap.put("repositoryId",repositoryId);
+        paramMap.put("shelvesId",shelvesId);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (StringUtils.isNotBlank(startDate)){
+            try {
+                paramMap.put("startDate",sdf.parse(startDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if (StringUtils.isNotBlank(endDate)){
+            try {
+                paramMap.put("endDate",sdf.parse(endDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        List<CheckRecord> records = null;
+        // 查询
+        Map<String, Object> queryResult = checkRecordService.selectByParam(paramMap);
+
+        if (queryResult != null) {
+            records = (List<CheckRecord>) queryResult.get("data");
+        }
+
+        // 获取生成的文件
+        File file = checkRecordService.exportRecord(records);
+
+        // 写出文件
+        if (file != null) {
+            // 设置响应头
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            FileInputStream inputStream = new FileInputStream(file);
+            OutputStream outputStream = response.getOutputStream();
+            byte[] buffer = new byte[8192];
+
+            int len;
+            while ((len = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                outputStream.write(buffer, 0, len);
+                outputStream.flush();
+            }
+
+            inputStream.close();
+            outputStream.close();
+        }
     }
 }

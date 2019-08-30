@@ -19,6 +19,8 @@
         datePickerInit();
         bootstrapValidatorInit();
         addRecordAction();
+
+        exportRecordAction();
     })
 
     // 日期选择器初始化
@@ -181,6 +183,26 @@
             search_start_date = $('#search_start_date').val();
             search_end_date = $('#search_end_date').val();
             tableRefresh();
+        })
+    }
+
+    // 导出盘点记录
+    function exportRecordAction() {
+        $('#export_record').click(function() {
+            $('#export_modal').modal("show");
+        })
+
+        $('#export_record_download').click(function(){
+            var data = {
+                repositoryId : search_repository,
+                shelvesId : search_shelves,
+                goodId : search_keyWord,
+                startDate : search_start_date,
+                endDate : search_end_date
+            }
+            var url = "checkRecordManage/exportCheckRecord?" + $.param(data)
+            window.open(url, '_blank');
+            $('#export_modal').modal("hide");
         })
     }
 
@@ -388,6 +410,9 @@
                 <button class="btn btn-sm btn-default" id="add_record">
                     <span class="glyphicon glyphicon-plus"></span> <span>盘点</span>
                 </button>
+                <button class="btn btn-sm btn-default" id="export_record">
+                    <span class="glyphicon glyphicon-export"></span> <span>导出</span>
+                </button>
             </div>
             <div class="col-md-5"></div>
         </div>
@@ -512,6 +537,41 @@
             <div class="modal-footer">
                 <button class="btn btn-default" type="button" data-dismiss="modal">
                     <span>&nbsp;&nbsp;&nbsp;关闭&nbsp;&nbsp;&nbsp;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 导出盘点记录模态框 -->
+<div class="modal fade" id="export_modal" table-index="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">导出盘点记录</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3" style="text-align: center;">
+                        <img src="media/icons/warning-icon.png" alt=""
+                             style="width: 70px; height: 70px; margin-top: 20px;">
+                    </div>
+                    <div class="col-md-8 col-sm-8">
+                        <h3>是否确认导出盘点记录</h3>
+                        <p>(注意：请确定要导出的盘点记录，导出的内容为当前列表的搜索结果)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">
+                    <span>取消</span>
+                </button>
+                <button class="btn btn-success" type="button" id="export_record_download">
+                    <span>确认下载</span>
                 </button>
             </div>
         </div>

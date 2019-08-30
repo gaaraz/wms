@@ -217,4 +217,24 @@
 		delete from wms_record_out
 		where RECORD_ID = #{id}
 	</delete>
+
+	<select id="queryStatisticalDataByGoodIdAndTime" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			DATE_FORMAT(r.RECORD_TIME,'%Y-%m') AS date,
+			SUM(r.RECORD_NUMBER) AS total,
+			SUM(r.RECORD_NUMBER * g.GOOD_VALUE) as price
+		FROM
+			wms_record_out r
+		LEFT JOIN wms_goods g
+		ON r.RECORD_GOODID = g.GOOD_ID
+		WHERE
+			DATE_FORMAT(r.RECORD_TIME,'%Y-%m') &gt;= #{startDate}
+		AND
+			DATE_FORMAT(r.RECORD_TIME,'%Y-%m') &lt;= #{endDate}
+		<if test="goodId != null and goodId != ''" >
+			AND r.RECORD_GOODID = #{goodId}
+		</if>
+		GROUP BY
+			DATE_FORMAT(r.RECORD_TIME,'%Y-%m')
+	</select>
 </mapper>

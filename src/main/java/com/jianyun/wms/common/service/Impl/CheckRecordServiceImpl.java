@@ -3,6 +3,7 @@ package com.jianyun.wms.common.service.Impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianyun.wms.common.service.Interface.CheckRecordService;
+import com.jianyun.wms.common.util.ExcelUtil;
 import com.jianyun.wms.dao.CheckRecordMapper;
 import com.jianyun.wms.dao.StorageMapper;
 import com.jianyun.wms.domain.CheckRecord;
@@ -16,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,8 @@ public class CheckRecordServiceImpl implements CheckRecordService{
     private CheckRecordMapper checkRecordMapper;
     @Autowired
     private StorageMapper storageMapper;
+    @Autowired
+    private ExcelUtil excelUtil;
 
     @Override
     public Map<String, Object> selectByParam(Map<String, Object> params) throws BusinessException {
@@ -90,5 +94,14 @@ public class CheckRecordServiceImpl implements CheckRecordService{
         } catch (PersistenceException e) {
             throw new BusinessException(e);
         }
+    }
+
+    @UserOperation(value = "导出盘点记录")
+    @Override
+    public File exportRecord(List<CheckRecord> records) {
+        if (records == null)
+            return null;
+
+        return excelUtil.excelWriter(CheckRecord.class, records);
     }
 }

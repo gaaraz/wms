@@ -3,6 +3,8 @@ package com.jianyun.wms.common.service.Interface;
 import com.jianyun.wms.domain.CheckRecord;
 import com.jianyun.wms.exception.BusinessException;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,4 +16,5 @@ import java.util.Map;
 public interface CheckRecordService {
     Map<String, Object> selectByParam(Map<String,Object> param) throws BusinessException;
     boolean insert(CheckRecord record) throws BusinessException;
+    File exportRecord(List<CheckRecord> records);
 }

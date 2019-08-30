@@ -1,7 +1,9 @@
 package com.jianyun.wms.common.service.Interface;
 
 import com.jianyun.wms.exception.SystemLogServiceException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -80,4 +82,8 @@ public interface SystemLogService {
      * @return 返回一个Map， 其中键值为 data 的值为所有符合条件的记录， 而键值为 total 的值为符合条件的记录总条数
      */
     Map<String, Object> selectUserOperationRecord(Integer userID, String startDateStr, String endDateStr, int offset, int limit) throws SystemLogServiceException;
+
+    File exportSql();
+
+    Boolean importSql(MultipartFile file);
 }

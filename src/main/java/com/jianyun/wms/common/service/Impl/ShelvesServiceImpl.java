@@ -3,6 +3,7 @@ package com.jianyun.wms.common.service.Impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jianyun.wms.common.service.Interface.ShelvesService;
+import com.jianyun.wms.common.util.ExcelUtil;
 import com.jianyun.wms.dao.ShelvesMapper;
 import com.jianyun.wms.domain.Shelves;
 import com.jianyun.wms.exception.BusinessException;
@@ -11,6 +12,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 public class ShelvesServiceImpl implements ShelvesService {
     @Autowired
     private ShelvesMapper shelvesMapper;
+    @Autowired
+    private ExcelUtil excelUtil;
 
     @Override
     public Map<String, Object> selectAll(int offset, int limit) throws BusinessException {
@@ -173,5 +177,14 @@ public class ShelvesServiceImpl implements ShelvesService {
         } catch (PersistenceException e) {
             throw new BusinessException(e);
         }
+    }
+
+    @UserOperation(value = "导出货架信息")
+    @Override
+    public File exportShelves(List<Shelves> shelves) {
+        if (shelves == null)
+            return null;
+
+        return excelUtil.excelWriter(Shelves.class, shelves);
     }
 }

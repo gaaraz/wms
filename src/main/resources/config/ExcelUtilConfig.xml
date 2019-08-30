@@ -177,4 +177,78 @@
 			<value>库存数量</value>
 		</property>
 	</entity>
+
+	<entity class="com.jianyun.wms.domain.Shelves">
+		<property>
+			<field>id</field>
+			<value>货架编号</value>
+		</property>
+		<property>
+			<field>name</field>
+			<value>货架名称</value>
+		</property>
+		<property>
+			<field>repoId</field>
+			<value>仓库编号</value>
+		</property>
+		<property>
+			<field>repoName</field>
+			<value>仓库名称</value>
+		</property>
+		<property>
+			<field>goodNames</field>
+			<value>支持存放的货物</value>
+		</property>
+		<property>
+			<field>goodIds</field>
+			<value>支持存放的货物编号</value>
+		</property>
+	</entity>
+
+	<entity class="com.jianyun.wms.domain.CheckRecord">
+		<property>
+			<field>id</field>
+			<value>编号</value>
+		</property>
+		<property>
+			<field>respositoryID</field>
+			<value>仓库编号</value>
+		</property>
+		<property>
+			<field>respository</field>
+			<value>仓库名称</value>
+		</property>
+		<property>
+			<field>shelvesID</field>
+			<value>货架编号</value>
+		</property>
+		<property>
+			<field>shelves</field>
+			<value>货架名称</value>
+		</property>
+		<property>
+			<field>goodID</field>
+			<value>货物编号</value>
+		</property>
+		<property>
+			<field>good</field>
+			<value>货物名称</value>
+		</property>
+		<property>
+			<field>recordNum</field>
+			<value>记录数量</value>
+		</property>
+		<property>
+			<field>realNum</field>
+			<value>实际数量</value>
+		</property>
+		<property>
+			<field>person</field>
+			<value>操作人</value>
+		</property>
+		<property>
+			<field>checkTimeStr</field>
+			<value>盘点时间</value>
+		</property>
+	</entity>
 </configuration>

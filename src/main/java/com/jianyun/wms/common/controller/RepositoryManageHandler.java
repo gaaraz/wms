@@ -3,8 +3,9 @@ package com.jianyun.wms.common.controller;
 import com.jianyun.wms.common.service.Interface.RepositoryService;
 import com.jianyun.wms.common.util.Response;
 import com.jianyun.wms.common.util.ResponseUtil;
-import com.jianyun.wms.exception.RepositoryManageServiceException;
 import com.jianyun.wms.domain.Repository;
+import com.jianyun.wms.exception.RepositoryManageServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -288,7 +289,7 @@ public class RepositoryManageHandler {
                                  HttpServletResponse response) throws RepositoryManageServiceException, IOException {
 
         // 导出文件名
-        String fileName = "repositoryInfo.xlsx";
+        String fileName = "repositoryInfo"+ TimeUtil.getTodayDate()+".xlsx";
 
         // 查询
         List<Repository> repositories;

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 出库记录 映射器
@@ -86,4 +87,6 @@ public interface StockOutMapper {
      * @param id 指定的出库记录ID
      */
     void deleteById(Integer id);
+
+    List<Map<String,Object>> queryStatisticalDataByGoodIdAndTime(Map<String,Object> param);
 }

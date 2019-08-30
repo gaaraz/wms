@@ -6,6 +6,7 @@ import com.jianyun.wms.common.util.ResponseUtil;
 import com.jianyun.wms.domain.Customer;
 import com.jianyun.wms.domain.Supplier;
 import com.jianyun.wms.exception.CustomerManageServiceException;
+import com.jianyun.wms.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -248,7 +249,7 @@ public class CustomerManageHandler {
     public void exportCustomer(@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
                                HttpServletResponse response) throws CustomerManageServiceException, IOException {
 
-        String fileName = "customerInfo.xlsx";
+        String fileName = "customerInfo"+ TimeUtil.getTodayDate()+".xlsx";
 
         List<Customer> customers = null;
         Map<String, Object> queryResult = query(searchType, keyWord, -1, -1);

@@ -526,9 +526,9 @@
 				<button class="btn btn-sm btn-default" id="add_goods">
 					<span class="glyphicon glyphicon-plus"></span> <span>添加货物信息</span>
 				</button>
-				<button class="btn btn-sm btn-default" id="import_goods">
-					<span class="glyphicon glyphicon-import"></span> <span>导入</span>
-				</button>
+				<%--<button class="btn btn-sm btn-default" id="import_goods">--%>
+					<%--<span class="glyphicon glyphicon-import"></span> <span>导入</span>--%>
+				<%--</button>--%>
 				<button class="btn btn-sm btn-default" id="export_goods">
 					<span class="glyphicon glyphicon-export"></span> <span>导出</span>
 				</button>

@@ -56,4 +56,6 @@ public interface StockRecordManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     Map<String, Object> selectStockRecord(Integer repositoryID, String startDateStr, String endDateStr, String searchType, int offset, int limit) throws StockRecordManageServiceException;
+
+    Map<String, Object> queryStatisticalData(Integer goodID,String startDate, String endDate) throws Exception;
 }

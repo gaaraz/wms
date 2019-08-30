@@ -14,7 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -292,5 +294,70 @@ public class SystemLogServiceImpl implements SystemLogService {
         userOperationRecordDTO.setOperationResult(userOperationRecordDO.getOperationResult());
         userOperationRecordDTO.setOperationTime(dateFormatDetail.format(userOperationRecordDO.getOperationTime()));
         return userOperationRecordDTO;
+    }
+
+    @Override
+    public File exportSql() {
+        File file = null;
+        try {
+            Runtime rt = Runtime.getRuntime();
+            Process child = rt.exec("mysqldump -h localhost -P3306 -uroot -proot wms_db");
+
+            file = File.createTempFile("wms",".sql");
+            InputStream in = child.getInputStream();
+            InputStreamReader inr = new InputStreamReader(in,"utf-8");
+
+            String inStr;
+            StringBuffer sb = new StringBuffer("");
+            String outStr;
+
+            BufferedReader br = new BufferedReader(inr);
+            while ((inStr = br.readLine()) != null){
+                sb.append(inStr + "\r\n");
+            }
+            outStr = sb.toString();
+
+            FileOutputStream fout = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fout, "utf-8");
+            writer.write(outStr);
+            writer.flush();
+            fout.flush();
+
+            in.close();
+            inr.close();
+            br.close();
+            writer.close();
+            fout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    @Override
+    public Boolean importSql(MultipartFile file) {
+        Runtime runtime = Runtime.getRuntime();
+        Process process;
+        try {
+            process = runtime.exec("mysql -h localhost -P3306 -uroot -proot --default-character-set=utf8 wms_db");
+            OutputStream outputStream = process.getOutputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+            String str = null;
+            StringBuffer sb = new StringBuffer();
+            while ((str = bufferedReader.readLine()) != null){
+                sb.append(str+"\r\n");
+            }
+            str = sb.toString();
+            OutputStreamWriter writer = new OutputStreamWriter(outputStream, "utf-8");
+            writer.write(str);
+            writer.flush();
+            outputStream.close();
+            bufferedReader.close();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

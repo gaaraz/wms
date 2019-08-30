@@ -177,10 +177,9 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         try {
             if (StringUtils.isNotEmpty(startDateStr))
                 startDate = dateFormat.parse(startDateStr);
-            if (StringUtils.isNotEmpty(endDateStr))
-            {
+            if (StringUtils.isNotEmpty(endDateStr)) {
                 endDate = dateFormat.parse(endDateStr);
-                newEndDate = new Date(endDate.getTime()+(24*60*60*1000)-1);
+                newEndDate = new Date(endDate.getTime() + (24 * 60 * 60 * 1000) - 1);
             }
         } catch (ParseException e) {
             throw new StockRecordManageServiceException(e);
@@ -464,4 +463,76 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         }
     }
 
+    private static List<String> getMonthBetween(String minDate, String maxDate) throws Exception {
+        ArrayList<String> result = new ArrayList<String>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");//格式化为年月
+
+        Calendar min = Calendar.getInstance();
+        Calendar max = Calendar.getInstance();
+
+        min.setTime(sdf.parse(minDate));
+        min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
+
+        max.setTime(sdf.parse(maxDate));
+        max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
+
+        Calendar curr = min;
+        while (curr.before(max)) {
+            result.add(sdf.format(curr.getTime()));
+            curr.add(Calendar.MONTH, 1);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> queryStatisticalData(Integer goodID, String startDate, String endDate) throws Exception {
+        Map<String,Object> result = new HashMap<>();
+
+        Map<String,Object> param = new HashMap<>();
+        param.put("goodId",goodID);
+        param.put("startDate",startDate);
+        param.put("endDate",endDate);
+        List<Map<String, Object>> list = stockOutMapper.queryStatisticalDataByGoodIdAndTime(param);
+        List<String> monthBetweenList = getMonthBetween(startDate, endDate);
+        for (String month:monthBetweenList){
+            Boolean isExist = false;
+            for (Map map:list){
+                String date = map.get("date").toString();
+                if (date.equals(month)){
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist){
+                Map<String,Object> map = new HashMap<>();
+                map.put("date",month);
+                map.put("total",0);
+                map.put("price",0);
+                list.add(map);
+            }
+        }
+        list.sort(new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                String data1Str = (String) o1.get("date");
+                String data2Str = (String) o2.get("date");
+                SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM");
+                Date data1 = null;
+                Date date2 = null;
+                try {
+                    data1 = sdf.parse(data1Str);
+                    date2 = sdf.parse(data2Str);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                return data1.compareTo(date2);
+            }
+        });
+
+        result.put("data", list);
+        result.put("total", list.size());
+        return result;
+    }
 }
