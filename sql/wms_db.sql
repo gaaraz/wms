@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50550
 File Encoding         : 65001
 
-Date: 2019-08-23 17:06:41
+Date: 2019-08-30 14:53:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,7 +27,7 @@ CREATE TABLE `wms_access_record` (
   `ACCESS_TIME` datetime NOT NULL COMMENT '登录时间',
   `ACCESS_IP` varchar(45) NOT NULL COMMENT 'IP',
   PRIMARY KEY (`RECORD_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8 COMMENT='登陆日志';
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='登陆日志';
 
 -- ----------------------------
 -- Records of wms_access_record
@@ -137,6 +137,31 @@ INSERT INTO `wms_access_record` VALUES ('102', '1001', 'admin', 'login', '2019-0
 INSERT INTO `wms_access_record` VALUES ('103', '1001', 'admin', 'login', '2019-08-23 16:33:56', '127.0.0.1');
 INSERT INTO `wms_access_record` VALUES ('104', '1001', 'admin', 'login', '2019-08-23 16:39:41', '127.0.0.1');
 INSERT INTO `wms_access_record` VALUES ('105', '1001', 'admin', 'login', '2019-08-23 16:56:38', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('106', '1001', 'admin', 'logout', '2019-08-23 17:29:24', '-');
+INSERT INTO `wms_access_record` VALUES ('107', '1001', 'admin', 'login', '2019-08-26 15:40:59', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('108', '1001', 'admin', 'logout', '2019-08-26 16:48:24', '-');
+INSERT INTO `wms_access_record` VALUES ('109', '1001', 'admin', 'login', '2019-08-27 09:39:02', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('110', '1001', 'admin', 'logout', '2019-08-27 10:31:24', '-');
+INSERT INTO `wms_access_record` VALUES ('111', '1001', 'admin', 'login', '2019-08-27 17:22:27', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('112', '1001', 'admin', 'logout', '2019-08-27 18:02:42', '-');
+INSERT INTO `wms_access_record` VALUES ('113', '1001', 'admin', 'login', '2019-08-27 18:18:31', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('114', '1001', 'admin', 'login', '2019-08-27 18:44:04', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('115', '1001', 'admin', 'login', '2019-08-27 18:45:53', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('116', '1001', 'admin', 'login', '2019-08-27 19:06:04', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('117', '1001', 'admin', 'login', '2019-08-27 19:08:00', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('118', '1001', 'admin', 'login', '2019-08-27 19:15:23', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('119', '1001', 'admin', 'login', '2019-08-27 19:17:28', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('120', '1001', 'admin', 'logout', '2019-08-27 19:57:52', '-');
+INSERT INTO `wms_access_record` VALUES ('121', '1001', 'admin', 'login', '2019-08-29 16:00:31', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('122', '1001', 'admin', 'login', '2019-08-29 16:02:50', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('123', '1001', 'admin', 'login', '2019-08-29 16:07:24', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('124', '1001', 'admin', 'logout', '2019-08-29 16:46:00', '-');
+INSERT INTO `wms_access_record` VALUES ('125', '1001', 'admin', 'login', '2019-08-29 16:48:15', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('126', '1001', 'admin', 'login', '2019-08-29 17:01:06', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('127', '1001', 'admin', 'login', '2019-08-29 17:18:49', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('128', '1001', 'admin', 'login', '2019-08-29 17:44:16', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('129', '1001', 'admin', 'login', '2019-08-29 18:06:44', '127.0.0.1');
+INSERT INTO `wms_access_record` VALUES ('130', '1001', 'admin', 'logout', '2019-08-29 18:39:46', '-');
 
 -- ----------------------------
 -- Table structure for wms_action
@@ -281,7 +306,7 @@ CREATE TABLE `wms_goods` (
 -- ----------------------------
 INSERT INTO `wms_goods` VALUES ('103', '五孔插座西门子墙壁开关', '86*86', '1.85', '4', null);
 INSERT INTO `wms_goods` VALUES ('104', '陶瓷马克杯', '9*9*11', '3.50', '2', null);
-INSERT INTO `wms_goods` VALUES ('105', '精酿苹果醋', '312ml', '300.00', '5', null);
+INSERT INTO `wms_goods` VALUES ('105', '精酿苹果醋', '312ml', '3.00', '5', null);
 INSERT INTO `wms_goods` VALUES ('106', '百事可乐', '600ml', '3.50', '5', null);
 
 -- ----------------------------
@@ -296,7 +321,7 @@ CREATE TABLE `wms_operation_record` (
   `OPERATION_TIME` datetime NOT NULL COMMENT '时间',
   `OPERATION_RESULT` varchar(15) NOT NULL COMMENT '结果',
   PRIMARY KEY (`RECORD_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='用户系统操作记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='用户系统操作记录表';
 
 -- ----------------------------
 -- Records of wms_operation_record
@@ -329,6 +354,15 @@ INSERT INTO `wms_operation_record` VALUES ('25', '1001', 'admin', '货物入库'
 INSERT INTO `wms_operation_record` VALUES ('26', '1001', 'admin', '货物出库', '2019-08-22 16:42:48', '成功');
 INSERT INTO `wms_operation_record` VALUES ('27', '1001', 'admin', '添加盘点记录', '2019-08-23 16:29:52', '成功');
 INSERT INTO `wms_operation_record` VALUES ('28', '1001', 'admin', '添加盘点记录', '2019-08-23 16:40:14', '成功');
+INSERT INTO `wms_operation_record` VALUES ('29', '1001', 'admin', '导出库存记录', '2019-08-29 16:07:39', '-');
+INSERT INTO `wms_operation_record` VALUES ('30', '1001', 'admin', '导出仓库管理员信息', '2019-08-29 16:09:09', '-');
+INSERT INTO `wms_operation_record` VALUES ('31', '1001', 'admin', '导出供应商信息', '2019-08-29 16:09:34', '-');
+INSERT INTO `wms_operation_record` VALUES ('32', '1001', 'admin', '导出客户信息', '2019-08-29 16:09:41', '-');
+INSERT INTO `wms_operation_record` VALUES ('33', '1001', 'admin', '导出货物信息', '2019-08-29 16:09:55', '-');
+INSERT INTO `wms_operation_record` VALUES ('34', '1001', 'admin', '导出仓库信息', '2019-08-29 16:10:07', '-');
+INSERT INTO `wms_operation_record` VALUES ('35', '1001', 'admin', '导出货架信息', '2019-08-29 17:04:47', '-');
+INSERT INTO `wms_operation_record` VALUES ('36', '1001', 'admin', '导出货架信息', '2019-08-29 17:19:03', '-');
+INSERT INTO `wms_operation_record` VALUES ('37', '1001', 'admin', '导出盘点记录', '2019-08-29 17:44:30', '-');
 
 -- ----------------------------
 -- Table structure for wms_record_in
@@ -375,13 +409,15 @@ CREATE TABLE `wms_record_out` (
   KEY `RECORD_CUSTOMERID` (`RECORD_CUSTOMERID`),
   KEY `RECORD_GOODID` (`RECORD_GOODID`),
   KEY `RECORD_REPOSITORYID` (`RECORD_REPOSITORYID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='出库记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='出库记录表';
 
 -- ----------------------------
 -- Records of wms_record_out
 -- ----------------------------
-INSERT INTO `wms_record_out` VALUES ('7', '1214', '104', '750', '2016-12-31 00:00:00', 'admin', '1003', '0');
+INSERT INTO `wms_record_out` VALUES ('7', '1214', '104', '750', '2019-06-01 16:47:50', 'admin', '1003', '0');
 INSERT INTO `wms_record_out` VALUES ('8', '1216', '105', '500', '2019-08-22 16:42:48', 'admin', '1003', '1');
+INSERT INTO `wms_record_out` VALUES ('9', '1214', '104', '750', '2019-08-29 16:47:50', 'admin', '1003', '0');
+INSERT INTO `wms_record_out` VALUES ('10', '1216', '105', '500', '2019-07-01 16:42:48', 'admin', '1003', '1');
 
 -- ----------------------------
 -- Table structure for wms_record_storage
@@ -542,7 +578,7 @@ CREATE TABLE `wms_shelves` (
   `REPO_ID` int(11) NOT NULL COMMENT '所属仓库',
   `GOOD_IDS` varchar(255) DEFAULT NULL COMMENT '货架支持存放的货物类型',
   PRIMARY KEY (`SHELVES_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT='货架表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='货架表';
 
 -- ----------------------------
 -- Records of wms_shelves
@@ -607,3 +643,9 @@ CREATE TABLE `wms_user_role` (
 INSERT INTO `wms_user_role` VALUES ('1', '1001');
 INSERT INTO `wms_user_role` VALUES ('2', '1018');
 INSERT INTO `wms_user_role` VALUES ('2', '1019');
+
+-- ----------------------------
+-- View structure for year_month_view
+-- ----------------------------
+DROP VIEW IF EXISTS `year_month_view`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER  VIEW `year_month_view` AS select date_format(curdate(),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 1 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 2 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 3 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 4 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 5 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 6 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 7 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 8 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 9 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 10 month),'%Y-%m') AS `year_month` union select date_format((curdate() - interval 11 month),'%Y-%m') AS `year_month` ;
