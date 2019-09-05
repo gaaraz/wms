@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianyun.wms.dao.MessageMapper">
+    <resultMap id="msg" type="com.jianyun.wms.domain.Message" >
+        <id property="id" column="MSG_ID" />
+        <result property="title" column="MSG_TITLE" />
+        <result property="content" column="MSG_CONTENT" />
+        <result property="status" column="MSG_STATUS" />
+        <result property="time" column="MSG_TIME" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="msg" >
+        select * FROM wms_msg ORDER BY MSG_STATUS ASC ,MSG_TIME DESC
+    </select>
+
+    <select id="countUnread" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM wms_msg WHERE MSG_STATUS = 0
+    </select>
+
+    <update id="updateStatus" >
+        UPDATE wms_msg SET MSG_STATUS = 1 WHERE MSG_ID = #{id}
+    </update>
+
+    <insert id="insert" >
+        INSERT INTO wms_msg (MSG_TITLE,MSG_CONTENT,MSG_STATUS,MSG_TIME) VALUE (#{title},#{content},#{status},now())
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM wms_msg WHERE MSG_ID = #{id}
+    </delete>
+</mapper>

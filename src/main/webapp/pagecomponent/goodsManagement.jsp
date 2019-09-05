@@ -90,6 +90,10 @@
 										title : '货物价值',
 									},
 									{
+										field : 'warningValue',
+										title : '库存预警值',
+									},
+									{
 										field : 'operation',
 										title : '操作',
 										formatter : function(value, row, index) {
@@ -143,6 +147,7 @@
 		$('#category_id_edit').val(row.categoryId);
 		$('#goods_size_edit').val(row.size);
 		$('#goods_value_edit').val(row.value);
+        $('#goods_warningValue_edit').val(row.warningValue);
 	}
 
 	// 添加供应商模态框数据校验
@@ -169,7 +174,14 @@
 							message : '货物价值不能为空'
 						}
 					}
-				}
+				},
+                goods_warningValue : {
+                    validators : {
+                        notEmpty : {
+                            message : '货物库存预警值不能为空'
+                        }
+                    }
+                }
 			}
 		})
 	}
@@ -185,13 +197,14 @@
 						return;
 					}
 
-					var data = {
-						id : selectID,
-						name : $('#goods_name_edit').val(),
+                    var data = {
+                        id : selectID,
+                        name : $('#goods_name_edit').val(),
                         categoryId : $('#category_id_edit').val(),
-						size : $('#goods_size_edit').val(),
-						value : $('#goods_value_edit').val(),
-					}
+                        size : $('#goods_size_edit').val(),
+                        value : $('#goods_value_edit').val(),
+                        warningValue : $('#goods_warningValue_edit').val()
+                    }
 
 					// ajax
 					$.ajax({
@@ -267,6 +280,7 @@
                 categoryId : $('#category_id').val(),
 				size : $('#goods_size').val(),
 				value : $('#goods_value').val(),
+                warningValue : $('#goods_warningValue').val()
 			}
 			// ajax
 			$.ajax({
@@ -294,6 +308,7 @@
 					$('#category_id').val("");
 					$('#goods_size').val("");
 					$('#goods_value').val("");
+                    $('#goods_warningValue').val("");
 					$('#goods_form').bootstrapValidator("resetForm", true);
 				},
 				error : function(response) {
@@ -593,6 +608,14 @@
 								<div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="goods_value"
 										name="goods_value" placeholder="货物价值">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>库存预警值：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="goods_warningValue"
+										   name="goods_warningValue" placeholder="库存预警值">
 								</div>
 							</div>
 						</form>
@@ -899,6 +922,14 @@
 									<input type="text" class="form-control"
 										id="goods_value_edit" name="goods_value"
 										placeholder="货物价值">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>库存预警值：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="goods_warningValue_edit"
+										   name="goods_warningValue_edit" placeholder="库存预警值">
 								</div>
 							</div>
 						</form>

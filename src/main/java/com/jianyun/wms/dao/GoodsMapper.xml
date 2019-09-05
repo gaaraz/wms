@@ -12,6 +12,7 @@
 		<result property="value" column="GOOD_VALUE"/>
 		<result property="categoryId" column="CATEGORY_ID" />
 		<result property="category" column="CATEGORY_NAME" />
+		<result property="warningValue" column="WARNING_VALUE" />
 	</resultMap>
 	
 	<select id="selectAll" resultMap="goods">
@@ -21,6 +22,7 @@
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
 			g.CATEGORY_ID,
+			g.WARNING_VALUE,
 			c.CATEGORY_NAME
 		from 
 			wms_goods g
@@ -36,6 +38,7 @@
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
 			g.CATEGORY_ID,
+			g.WARNING_VALUE,
 			c.CATEGORY_NAME
 		from
 			wms_goods g
@@ -53,6 +56,7 @@
 		g.GOOD_SIZE,
 		g.GOOD_VALUE,
 		g.CATEGORY_ID,
+		g.WARNING_VALUE,
 		c.CATEGORY_NAME
 		from
 		wms_goods g
@@ -72,6 +76,7 @@
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
 			g.CATEGORY_ID,
+			g.WARNING_VALUE,
 			c.CATEGORY_NAME
 		from
 			wms_goods g
@@ -89,6 +94,7 @@
 			g.GOOD_SIZE,
 			g.GOOD_VALUE,
 			g.CATEGORY_ID,
+			g.WARNING_VALUE,
 			c.CATEGORY_NAME
 		from
 			wms_goods g
@@ -100,15 +106,15 @@
 	</select>
 
 	<insert id="insert">
-		insert into wms_goods(GOOD_NAME,GOOD_SIZE,GOOD_VALUE,CATEGORY_ID)
-		values (#{name},#{size},#{value},#{categoryId})
+		insert into wms_goods(GOOD_NAME,GOOD_SIZE,GOOD_VALUE,CATEGORY_ID,WARNING_VALUE)
+		values (#{name},#{size},#{value},#{categoryId},#{warningValue})
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_goods(GOOD_NAME,GOOD_SIZE,GOOD_VALUE,CATEGORY_ID)
+		insert into wms_goods(GOOD_NAME,GOOD_SIZE,GOOD_VALUE,CATEGORY_ID,WARNING_VALUE)
 		values
 		<foreach collection="list" item="goods" separator=",">
-			(#{goods.name},#{goods.size},#{goods.value},#{goods.categoryId})
+			(#{goods.name},#{goods.size},#{goods.value},#{goods.categoryId},#{goods.warningValue})
 		</foreach>
 	</insert>
 	
@@ -119,7 +125,8 @@
 			GOOD_NAME = #{name},
 			GOOD_SIZE = #{size},
 			GOOD_VALUE = #{value},
-			CATEGORY_ID = #{categoryId}
+			CATEGORY_ID = #{categoryId},
+			WARNING_VALUE = #{warningValue}
 		where
 			GOOD_ID = #{id}
 	</update>

@@ -39,6 +39,10 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     private StockInMapper stockinMapper;
     @Autowired
     private StockOutMapper stockOutMapper;
+    @Autowired
+    private StorageMapper storageMapper;
+    @Autowired
+    private MessageMapper messageMapper;
 
     /**
      * 货物入库操作
@@ -125,6 +129,16 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                 stockOutDO.setShelvesID(shelvesID);
                 stockOutDO.setTime(new Date());
                 stockOutMapper.insert(stockOutDO);
+
+                Long stock = storageMapper.queryStorageByGood(goodsID);
+                Goods goods = goodsMapper.selectById(goodsID);
+                if (stock <= goods.getWarningValue()){
+                    Message msg = new Message();
+                    msg.setTitle("库存预警");
+                    msg.setContent("商品"+goods.getName()+"库存已经不足"+goods.getWarningValue()+",请注意查看");
+                    msg.setStatus(0);
+                    messageMapper.insert(msg);
+                }
             }
 
             return isSuccess;

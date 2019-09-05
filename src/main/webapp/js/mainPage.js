@@ -4,6 +4,7 @@ $(function() {
 	signOut();
 	getRequestPrefix();
 	homePage();
+    unread();
 });
 
 // 获取请求前缀
@@ -47,4 +48,18 @@ function signOut() {
 			}
 		})
 	})
+}
+
+function unread() {
+    $.ajax({
+        type : "GET",
+        url : "messageManage/countUnread",
+        dataType : "json",
+        contentType : "application/json",
+        success:function(response){
+            $("#unread").text(response.data);
+        },error:function(response){
+
+        }
+    })
 }

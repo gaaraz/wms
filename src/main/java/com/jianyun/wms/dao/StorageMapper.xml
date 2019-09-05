@@ -194,4 +194,8 @@
 			RECORD_REPOSITORY = #{repositoryID} and
 			RECORD_SHELVES = #{shelvesID}
 	</delete>
+
+	<select id="queryStorageByGood" resultType="java.lang.Long" >
+		SELECT sum(RECORD_NUMBER) FROM wms_record_storage WHERE RECORD_GOODID = #{id}
+	</select>
 </mapper>

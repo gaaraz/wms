@@ -13,6 +13,7 @@ public class Goods {
 	private Double value;// 货物价值
 	private Integer categoryId;
 	private String category;
+	private Integer warningValue;
 
 	public Integer getId() {
 		return id;
@@ -60,6 +61,14 @@ public class Goods {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public Integer getWarningValue() {
+		return warningValue;
+	}
+
+	public void setWarningValue(Integer warningValue) {
+		this.warningValue = warningValue;
 	}
 
 	@Override

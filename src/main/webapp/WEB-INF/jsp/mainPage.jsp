@@ -43,14 +43,14 @@ pageEncoding="UTF-8"%>
                         </a>
                         <ul class="dropdown-menu">
                             <!-通过session获取的name的值-->
-                            <shiro:hasRole name="commonsAdmin">
-                                <li>
-                                    <a href="#" id="editInfo"> <span
-                                            class="glyphicon glyphicon-pencil"></span> &nbsp;&nbsp;修改个人信息</a></li>
-                            </shiro:hasRole>
+                            <%--<shiro:hasRole name="commonsAdmin">--%>
+                                <%--<li>--%>
+                                    <%--<a href="#" id="editInfo"> <span--%>
+                                            <%--class="glyphicon glyphicon-pencil"></span> &nbsp;&nbsp;修改个人信息</a></li>--%>
+                            <%--</shiro:hasRole>--%>
                             <shiro:hasRole name="systemAdmin">
                                 <li>
-                                    <a href="#">新的消息<span class="badge">42</span></a>
+                                    <a href="#" id="msg" class="menu_item"  name="pagecomponent/messageManagement.jsp">新的消息&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" id="unread">0</span></a>
                                 </li>
                             </shiro:hasRole>
                             <li>

@@ -88,4 +88,6 @@ public interface StorageMapper {
 	void deleteByRepositoryIDAndGoodsID(@Param("goodsID") Integer goodsID,
 										@Param("repositoryID") Integer repositoryID,
 										@Param("shelvesID") Integer shelvesID);
+
+	Long queryStorageByGood(Integer id);
 }

@@ -331,31 +331,31 @@ function stockInOption(){
 		}
 
 		$.ajax({
-			type : 'POST',
-			url : 'stockRecordManage/stockIn',
-			dataType : 'json',
-			content : 'application/json',
-			data : data,
-			success : function(response){
-				var msg;
-				var type;
-				
-				if(response.result == "success"){
-					type = 'success';
-					msg = '货物入库成功';
-					inputReset();
-				}else{
-					type = 'error';
-					msg = '货物入库失败'
-				}
-				infoModal(type, msg);
-			},
-			error : function(response){
-				var msg = "服务器错误";
-				var type = "error";
-				infoModal(type, msg);
-			}
-		})
+            type : 'POST',
+            url : 'stockRecordManage/stockIn',
+            dataType : 'json',
+            content : 'application/json',
+            data : data,
+            success : function(response){
+                var msg;
+                var type;
+
+                if(response.result == "success"){
+                    type = 'success';
+                    msg = '货物入库成功';
+                    inputReset();
+                }else{
+                    type = 'error';
+                    msg = '货物入库失败'
+                }
+                infoModal(type, msg);
+            },
+            error : function(response){
+                var msg = "服务器错误";
+                var type = "error";
+                infoModal(type, msg);
+            }
+        })
 	});
 }
 
@@ -604,7 +604,7 @@ function infoModal(type, msg) {
 							<div class="col-md-6 col-sm-6">
 								<div class="row">
 									<div class="col-md-1 col-sm-1"></div>
-									<div class="col-md-10 col-sm-11">
+									<div class="col-md-20 col-sm-11">
 										<form action="" class="form-inline" id="stockin_form">
 											<div class="form-group">
 												<label for="" class="control-label">入库数量：</label>
