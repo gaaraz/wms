@@ -144,4 +144,22 @@
 	<select id="selectByCategoryId" resultMap="goods" >
 		SELECT * FROM wms_goods WHERE CATEGORY_ID = #{id}
 	</select>
+
+	<select id="selectByCategory" resultMap="goods" >
+		select
+			g.GOOD_ID,
+			g.GOOD_NAME,
+			g.GOOD_SIZE,
+			g.GOOD_VALUE,
+			g.CATEGORY_ID,
+			g.WARNING_VALUE,
+			c.CATEGORY_NAME
+		from
+			wms_goods g
+		LEFT JOIN
+			wms_category c
+		ON g.CATEGORY_ID = c.CATEGORY_ID
+		where
+			g.CATEGORY_ID = #{category}
+	</select>
 </mapper>

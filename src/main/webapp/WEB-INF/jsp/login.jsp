@@ -17,7 +17,10 @@
 			<div class="col-md-4 col-sm-3"></div>
 
 			<!-- 这一列为登陆表单 -->
-			<div class="col-md-4 col-sm-6">
+			<div class="col-md-4 col-sm-6" style="
+				margin-left: 390px;
+				margin-top: 100px;
+			">
 				<div class="panel panel-default">
 
 					<!-- 登陆面板的标题 -->

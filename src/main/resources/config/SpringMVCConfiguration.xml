@@ -19,6 +19,8 @@
 		<property name="prefix" value="/WEB-INF/jsp/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
+
+	<mvc:view-controller path="/" view-name="mainPage"/>
 	
 	<mvc:default-servlet-handler/>
 	<mvc:annotation-driven/>

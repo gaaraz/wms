@@ -138,6 +138,44 @@ public class GoodsManageServiceImpl implements GoodsManageService {
         return resultSet;
     }
 
+    @Override
+    public Map<String, Object> searchByCategory(int offset, int limit, Integer category) throws GoodsManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Goods> goodsList;
+        long total = 0;
+        boolean isPagination = true;
+
+        // validate
+        if (offset < 0 || limit < 0)
+            isPagination = false;
+
+        // query
+        try {
+            if (isPagination) {
+                PageHelper.offsetPage(offset, limit);
+                goodsList = goodsMapper.selectByCategory(category);
+                if (goodsList != null) {
+                    PageInfo<Goods> pageInfo = new PageInfo<>(goodsList);
+                    total = pageInfo.getTotal();
+                } else
+                    goodsList = new ArrayList<>();
+            } else {
+                goodsList = goodsMapper.selectByCategory(category);
+                if (goodsList != null)
+                    total = goodsList.size();
+                else
+                    goodsList = new ArrayList<>();
+            }
+        } catch (PersistenceException e) {
+            throw new GoodsManageServiceException(e);
+        }
+
+        resultSet.put("data", goodsList);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
     /**
      * 返回指定 goods name 的货物记录 支持模糊查询
      *

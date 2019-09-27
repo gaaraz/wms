@@ -17,7 +17,8 @@
 		editGoodsAction();
 		deleteGoodsAction();
 		importGoodsAction();
-		exportGoodsAction()
+		exportGoodsAction();
+        searchCategoryChange();
 	})
 
 	// 下拉框選擇動作
@@ -27,15 +28,28 @@
 			$("#search_input").val("");
 			if (type == "所有") {
 				$("#search_input").attr("readOnly", "true");
+                $("#search_input").show();
+                $("#search_category_id").hide();
 				search_type_goods = "searchAll";
 			} else if (type == "货物ID") {
 				$("#search_input").removeAttr("readOnly");
+                $("#search_input").show();
+                $("#search_category_id").hide();
 				search_type_goods = "searchByID";
 			} else if (type == "货物名称") {
 				$("#search_input").removeAttr("readOnly");
+                $("#search_input").show();
+                $("#search_category_id").hide();
 				search_type_goods = "searchByName";
-			} else {
+			}else if (type == "货物类型") {
+                $("#search_input").removeAttr("readOnly");
+                $("#search_input").hide();
+                $("#search_category_id").show();
+                search_type_goods = "searchByCategory";
+            } else {
 				$("#search_input").removeAttr("readOnly");
+                $("#search_input").show();
+                $("#search_category_id").hide();
 			}
 
 			$("#search_type").text(type);
@@ -492,15 +506,26 @@
                 $.each(response.rows,function(index,elem){
                     $('#category_id').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
                     $('#category_id_edit').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
+                    $('#search_category_id').append("<option value='" + elem.id + "'>" + elem.name +"</option>");
                 });
             },
             error : function(response){
                 $('#category_id').append("<option value='-1'>加载失败</option>");
                 $('#category_id_edit').append("<option value='-1'>加载失败</option>");
+                $('#search_category_id').append("<option value='-1'>加载失败</option>");
             }
 
         })
     }
+
+    function searchCategoryChange(){
+        $('#search_category_id').change(
+            function () {
+				var categoryId = $(this).val();
+				$('#search_input').val(categoryId);
+            }
+		);
+	}
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
@@ -517,6 +542,7 @@
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0)" class="dropOption">货物ID</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">货物名称</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">货物类型</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -526,6 +552,9 @@
 					<div class="col-md-3 col-sm-4">
 						<input id="search_input" type="text" class="form-control"
 							placeholder="货物ID">
+						<select name="" id="search_category_id" name="search_category_id" class="form-control" style="display: none;">
+							<option value="">请选择货物类型</option>
+						</select>
 					</div>
 					<div class="col-md-2 col-sm-2">
 						<button id="search_button" class="btn btn-success">

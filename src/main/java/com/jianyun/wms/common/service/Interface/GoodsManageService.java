@@ -36,6 +36,8 @@ public interface GoodsManageService {
      */
     Map<String, Object> selectByName(int offset, int limit, String goodsName) throws GoodsManageServiceException;
 
+    Map<String, Object> searchByCategory(int offset, int limit, Integer category) throws GoodsManageServiceException;
+
     /**
      * 返回指定 goods name 的货物记录
      * 支持模糊查询

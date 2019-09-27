@@ -43,6 +43,8 @@ public interface GoodsMapper {
 	 * @return 返回模糊匹配指定goodsName的货物
 	 */
 	List<Goods> selectApproximateByName(String goodsName);
+
+	List<Goods> selectByCategory(Integer category);
 	
 	/**
 	 * 插入一条新的记录到数据库

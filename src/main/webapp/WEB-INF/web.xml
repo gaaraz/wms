@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          id="WebApp_ID" version="3.1">
     <display-name>WMS</display-name>
+    <welcome-file-list>
+        <welcome-file>mainPage.html</welcome-file>
+        <welcome-file>mainPage.htm</welcome-file>
+        <welcome-file>mainPage.jsp</welcome-file>
+    </welcome-file-list>
 
     <!-- Spring MVC springDispatcherServlet 配置 -->
     <!-- The front controller of this Spring Web application, responsible for handling all application requests -->

@@ -28,7 +28,7 @@ public class CheckCodeGenerator {
 	private static Font font;// 验证码字体样式
 
 	static {
-		font = new Font("楷体", Font.BOLD|Font.ITALIC, 25);
+		font = new Font("Corbel", Font.BOLD|Font.ITALIC, 25);
 	}
 
 	/**

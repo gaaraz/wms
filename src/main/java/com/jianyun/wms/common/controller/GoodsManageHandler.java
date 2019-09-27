@@ -36,6 +36,7 @@ public class GoodsManageHandler {
 
     private static final String SEARCH_BY_ID = "searchByID";
     private static final String SEARCH_BY_NAME = "searchByName";
+    private static final String SEARCH_BY_CATEGORY = "searchByCategory";
     private static final String SEARCH_ALL = "searchAll";
 
     /**
@@ -61,6 +62,9 @@ public class GoodsManageHandler {
             case SEARCH_ALL:
                 queryResult = goodsManageService.selectAll(offset, limit);
                 break;
+            case SEARCH_BY_CATEGORY:
+                if (StringUtils.isNumeric(keyWord))
+                    queryResult = goodsManageService.searchByCategory(offset,limit,Integer.valueOf(keyWord));
             default:
                 // do other thing
                 break;
