@@ -339,7 +339,7 @@ public class SystemLogServiceImpl implements SystemLogService {
         Runtime runtime = Runtime.getRuntime();
         Process process;
         try {
-            process = runtime.exec("mysql -h localhost -P3306 -uroot -proot --default-character-set=utf8 wms_db");
+            process = runtime.exec("mysql -h localhost -P3306 -uroot -pjianyunroot --default-character-set=utf8 wms_db");
             OutputStream outputStream = process.getOutputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
             String str = null;

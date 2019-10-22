@@ -15,8 +15,8 @@ public class TimeUtil {
         return dtf.format(ZonedDateTime.now());
     }
 
-    public static long getCurrentTimeMillis() {
+    public static String getCurrentTimeMillis() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return Long.parseLong(dtf.format(ZonedDateTime.now()));
+        return dtf.format(ZonedDateTime.now());
     }
 }

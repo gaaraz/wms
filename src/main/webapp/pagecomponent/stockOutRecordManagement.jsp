@@ -205,6 +205,7 @@ pageEncoding="UTF-8"%>
     }
 
     function preview(row){
+        $("#previewTable tbody td").empty();
         var head_tr = $("#previewTable thead").find(">tr");
         var date = new Date(row.time);
         head_tr.eq(0).find(">td").eq(1).html("单据编号: "+row.batchId);
@@ -214,13 +215,13 @@ pageEncoding="UTF-8"%>
         foot_tr.eq(1).find(">td").eq(1).html("库管: "+row.storeman);
         foot_tr.eq(1).find(">td").eq(2).html("入库人员: "+row.inputman);
 
-        var data;
+        var data = new Array();
         if (row.detail){
             data = row.detail;
         }else{
-            data = row;
+            data[0] = row;
         }
-
+        console.log(data);
         var body_tr = $("#previewTable tbody").find(">tr");
         for(var i=0;i<data.length;i++){
             if (i < 12){
