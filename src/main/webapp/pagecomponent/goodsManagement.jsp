@@ -552,7 +552,7 @@
 					<div class="col-md-3 col-sm-4">
 						<input id="search_input" type="text" class="form-control"
 							placeholder="货物ID">
-						<select name="" id="search_category_id" name="search_category_id" class="form-control" style="display: none;">
+						<select name="" id="search_category_id" name="search_category_id" class="form-control" style="display: none;" onmouseover="this.size='5';" onmouseout="this.size='1';">
 							<option value="">请选择货物类型</option>
 						</select>
 					</div>

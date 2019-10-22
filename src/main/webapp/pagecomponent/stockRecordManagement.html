@@ -3,10 +3,9 @@
 
 <script>
     // 出入库记录查询参数
-    search_type = 'none'
-    search_repositoryID = ''
-    search_start_date = null
-    search_end_date = null
+    search_repositoryID = '';
+    search_start_date = null;
+    search_end_date = null;
 
     $(function(){
         repositoryOptionInit();
@@ -62,73 +61,45 @@
 						{
 							columns : [
 									{
-										field : 'recordID',
+										field : 'id',
 										title : '记录ID'
 									//sortable: true
 									},
 									{
-										field : 'supplierOrCustomerName',
-										title : '供应商/客户名称'
+										field : 'supplierName',
+										title : '供应商名称'
 									},
 									{
-										field : 'goodsName',
+										field : 'goodName',
 										title : '商品名称'
 									},
 									{
 										field : 'repository',
-										title : '出/入库仓库',
+										title : '入库仓库',
 										//visible : false
 									},
                                     {
                                         field : 'shelves',
-                                        title : '出/入库货架',
+                                        title : '入库货架',
                                         //visible : false
                                     },
 									{
 										field : 'number',
 										title : '数量',
-										//visible : false
 									},
 									{
 										field : 'time',
-										title : '日期'
+										title : '日期',
+                                        formatter: function (value, row, index) {
+                                            return changeDateFormat(value)
+                                        }
 									},
 									{
 										field : 'personInCharge',
 										title : '经手人'
-									},
-									{
-										field : 'type',
-										title : '记录类型'
 									}
-//									<!--,-->
-//									<!--{-->
-//										<!--field : 'operation',-->
-//										<!--title : '操作',-->
-//										<!--formatter : function(value, row, index) {-->
-//											<!--var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';-->
-//											<!--var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';-->
-//											<!--var fun = '';-->
-//											<!--return s + ' ' + d;-->
-//										<!--},-->
-//										<!--events : {-->
-//											<!--// 操作列中编辑按钮的动作-->
-//											<!--'click .edit' : function(e, value,-->
-//													<!--row, index) {-->
-//												<!--//selectID = row.id;-->
-//												<!--rowEditOperation(row);-->
-//											<!--},-->
-//											<!--'click .delete' : function(e,-->
-//													<!--value, row, index) {-->
-//												<!--select_goodsID = row.goodsID;-->
-//												<!--select_repositoryID = row.repositoryID-->
-//												<!--$('#deleteWarning_modal').modal(-->
-//														<!--'show');-->
-//											<!--}-->
-//										<!--}-->
-//									<!--}-->
-									 ],
-							url : 'stockRecordManage/searchStockRecord',
+                            ],
+							url : 'stockRecordManage/getStockInRecord',
 							method : 'GET',
 							queryParams : queryParams,
 							sidePagination : "server",
@@ -140,6 +111,21 @@
 							clickToSelect : true
 						});
 	}
+
+    function changeDateFormat(cellval) {
+        var dateVal = cellval + "";
+        if (cellval != null) {
+            var date = new Date(parseInt(dateVal.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+            var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
+        }
+    }
 
 	// 表格刷新
 	function tableRefresh() {
@@ -153,7 +139,6 @@
 		var temp = {
 			limit : params.limit,
 			offset : params.offset,
-			searchType : search_type,
 			repositoryID : search_repositoryID,
 			startDate : search_start_date,
 			endDate : search_end_date
@@ -165,7 +150,6 @@
 	function searchAction(){
 	    $('#search_button').click(function(){
 	        search_repositoryID = $('#search_repository_ID').val();
-	        search_type = $('#search_type').val();
 	        search_start_date = $('#search_start_date').val();
 	        search_end_date = $('#search_end_date').val();
 	        tableRefresh();
@@ -189,16 +173,6 @@
                     </div>
                 </form>
             </div>
-                <div class="col-md-4">
-                    <form action="" class="form-inline">
-                        <label class="form-label">记录过滤：</label>
-                        <select name="" id="search_type" class="form-control">
-                            <option value="all">显示所有</option>
-                            <option value="stockInOnly">仅显示入库记录</option>
-                            <option value="stockOutOnly">仅显示出库记录</option>
-                        </select>
-                    </form>
-                </div>
             <div class="col-md-4">
                 <button class="btn btn-success" id="search_button">
                     <span class="glyphicon glyphicon-search"></span> <span>查询</span>

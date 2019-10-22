@@ -104,9 +104,14 @@ pageEncoding="UTF-8"%>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id=""
                                            class="menu_item"
-                                           name="pagecomponent/stockRecordManagement.html">出入库记录</a>
+                                           name="pagecomponent/stockRecordManagement.html">入库记录</a>
                                     </li>
                                 </shiro:hasRole>
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id=""
+                                       class="menu_item"
+                                       name="pagecomponent/stockOutRecordManagement.jsp">出库记录</a>
+                                </li>
                                 <li class="list-group-item">
                                     <a href="javascript:void(0)" id="" class="menu_item"
                                        name="pagecomponent/checkRecordManagement.jsp">盘点</a>
@@ -352,5 +357,7 @@ pageEncoding="UTF-8"%>
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/js/LodopFuncs.js"></script>
 </body>
 </html>

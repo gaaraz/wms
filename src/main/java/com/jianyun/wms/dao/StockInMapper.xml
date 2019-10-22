@@ -193,11 +193,12 @@
 				<![CDATA[and r.RECORD_TIME <= #{endDate,jdbcType=DATE}]]>
 			</if>
 		</where>
+		ORDER BY STOCKIN_TIME DESC
 	</select>
 	
 	<insert id="insert">
-		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_SHELVESID)
-		values(#{supplierID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID},#{shelvesID})
+		insert into wms_record_in(RECORD_ID,RECORD_SUPPLIERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_SHELVESID)
+		values(#{id},#{supplierID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID},#{shelvesID})
 	</insert>
 	
 	<update id="update">

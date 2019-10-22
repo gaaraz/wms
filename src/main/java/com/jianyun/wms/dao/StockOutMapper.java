@@ -59,6 +59,8 @@ public interface StockOutMapper {
                                                  @Param("startDate") Date startDate,
                                                  @Param("endDate") Date endDate);
 
+    List<StockOutDO> selectByBatchId( String batchId);
+
     /**
      * 选择指定ID的出库记录
      *
@@ -73,6 +75,8 @@ public interface StockOutMapper {
      * @param stockOutDO 出库记录
      */
     void insert(StockOutDO stockOutDO);
+
+    void insertBatch(List<StockOutDO> list);
 
     /**
      * 更新出库记录

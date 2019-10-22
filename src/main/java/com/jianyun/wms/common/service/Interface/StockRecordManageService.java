@@ -1,7 +1,9 @@
 package com.jianyun.wms.common.service.Interface;
 
+import com.jianyun.wms.domain.StockOutDO;
 import com.jianyun.wms.exception.StockRecordManageServiceException;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,29 +35,11 @@ public interface StockRecordManageService {
      */
     boolean stockOutOperation(Integer customerID, Integer goodsID, Integer repositoryID, Integer shelvesID, long number, String personInCharge) throws StockRecordManageServiceException;
 
-    /**
-     * 查询出入库记录
-     *
-     * @param repositoryID 仓库ID
-     * @param endDateStr   查询记录起始日期
-     * @param startDateStr 查询记录结束日期
-     * @param searchType   记录查询方式
-     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
-     */
-    Map<String, Object> selectStockRecord(Integer repositoryID, String startDateStr, String endDateStr, String searchType) throws StockRecordManageServiceException;
-
-    /**
-     * 分页查询出入库记录
-     *
-     * @param repositoryID 仓库ID
-     * @param endDateStr   查询记录起始日期
-     * @param startDateStr 查询记录结束日期
-     * @param searchType   记录查询方式
-     * @param offset       分页偏移值
-     * @param limit        分页大小
-     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
-     */
-    Map<String, Object> selectStockRecord(Integer repositoryID, String startDateStr, String endDateStr, String searchType, int offset, int limit) throws StockRecordManageServiceException;
+    String stockOutOperation(List<StockOutDO> list,String personInCharge) throws StockRecordManageServiceException;
 
     Map<String, Object> queryStatisticalData(Integer goodID,String startDate, String endDate) throws Exception;
+
+    Map<String, Object> selectStockInRecord(Integer repositoryID, String startDate, String endDate, int offset, int limit) throws StockRecordManageServiceException;
+
+    Map<String, Object> selectStockOutRecord(Integer repositoryID, String startDate, String endDate, int offset, int limit) throws StockRecordManageServiceException;
 }

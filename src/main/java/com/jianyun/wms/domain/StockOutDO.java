@@ -2,6 +2,7 @@ package com.jianyun.wms.domain;
 
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 出库记录
@@ -13,7 +14,9 @@ public class StockOutDO {
     /**
      * 出库记录ID
      */
-    private Integer id;
+    private String id;
+
+    private String batchId;
 
     /**
      * 客户ID
@@ -34,6 +37,8 @@ public class StockOutDO {
      * 商品名称
      */
     private String goodName;
+    private String goodSize;
+    private String goodValue;
 
     /**
      * 出库仓库ID
@@ -53,6 +58,9 @@ public class StockOutDO {
      */
     private long number;
 
+    private Integer packages;
+
+    private String remark;
     /**
      * 出库日期
      */
@@ -61,7 +69,11 @@ public class StockOutDO {
     /**
      * 出库经手人
      */
-    private String personInCharge;// 经手人
+    private String personInCharge;  // 经手人
+    private String storeman;        // 库管
+    private String inputman;        // 入库人员
+
+    private List<StockOutDO> detail;
 
     public String getRepository() {
         return repository;
@@ -95,12 +107,20 @@ public class StockOutDO {
         this.repositoryID = repositoryID;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 
     public Integer getCustomerID() {
@@ -135,12 +155,44 @@ public class StockOutDO {
         this.goodName = goodName;
     }
 
+    public String getGoodSize() {
+        return goodSize;
+    }
+
+    public void setGoodSize(String goodSize) {
+        this.goodSize = goodSize;
+    }
+
+    public String getGoodValue() {
+        return goodValue;
+    }
+
+    public void setGoodValue(String goodValue) {
+        this.goodValue = goodValue;
+    }
+
     public long getNumber() {
         return number;
     }
 
     public void setNumber(long number) {
         this.number = number;
+    }
+
+    public Integer getPackages() {
+        return packages;
+    }
+
+    public void setPackages(Integer packages) {
+        this.packages = packages;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getTime() {
@@ -157,6 +209,30 @@ public class StockOutDO {
 
     public void setPersonInCharge(String personInCharge) {
         this.personInCharge = personInCharge;
+    }
+
+    public String getStoreman() {
+        return storeman;
+    }
+
+    public void setStoreman(String storeman) {
+        this.storeman = storeman;
+    }
+
+    public String getInputman() {
+        return inputman;
+    }
+
+    public void setInputman(String inputman) {
+        this.inputman = inputman;
+    }
+
+    public List<StockOutDO> getDetail() {
+        return detail;
+    }
+
+    public void setDetail(List<StockOutDO> detail) {
+        this.detail = detail;
     }
 
     @Override

@@ -7,6 +7,7 @@
 	
 	<resultMap type="com.jianyun.wms.domain.StockOutDO" id="stockOutDO">
 		<id property="id" column="STOCKOUT_ID"/>
+		<result property="batchId" column="STOCKOUT_BATCH" />
 		<result property="customerID" column="STOCKOUT_CUSTOMER_ID"/>
 		<result property="customerName" column="STOCKOUT_CUSTOMER_NAME"/>
 		<result property="goodID" column="STOCKOUT_GOOD_ID"/>
@@ -18,11 +19,16 @@
 		<result property="repository" column="STOCKOUT_REPOSITORY"/>
 		<result property="shelvesID" column="STOCKOUT_SHELVES_ID" />
 		<result property="shelves" column="STOCKOUT_SHELVES" />
+		<result property="packages" column="STOCKOUT_PACKAGES" />
+		<result property="remark" column="STOCKOUT_REMARK" />
+		<result property="storeman" column="STOCKOUT_STOREMAN" />
+		<result property="inputman" column="STOCKOUT_INPUTMAN" />
 	</resultMap>
 	
 	<select id="selectAll" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
 			r.RECORD_GOODID as STOCKIN_GOOD_ID,
@@ -33,7 +39,11 @@
 			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
 			res.REPO_NAME as STOCKOUT_REPOSITORY,
 			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
-			sh.SHELVES_NAME as STOCKOUT_SHELVES
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
 		from
 			wms_record_out r
 			LEFT JOIN wms_goods g
@@ -49,6 +59,7 @@
 	<select id="selectByCustomerId" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
 			r.RECORD_GOODID as STOCKIN_GOOD_ID,
@@ -59,7 +70,11 @@
 			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
 			res.REPO_NAME as STOCKOUT_REPOSITORY,
 			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
-			sh.SHELVES_NAME as STOCKOUT_SHELVES
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
 		from
 			wms_record_out r
 			LEFT JOIN wms_goods g
@@ -77,6 +92,7 @@
 	<select id="selectByGoodId" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
 			r.RECORD_GOODID as STOCKIN_GOOD_ID,
@@ -87,7 +103,11 @@
 			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
 			res.REPO_NAME as STOCKOUT_REPOSITORY,
 			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
-			sh.SHELVES_NAME as STOCKOUT_SHELVES
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
 		from
 			wms_record_out r
 			LEFT JOIN wms_goods g
@@ -105,6 +125,7 @@
 	<select id="selectById" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
 			r.RECORD_GOODID as STOCKIN_GOOD_ID,
@@ -115,7 +136,11 @@
 			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
 			res.REPO_NAME as STOCKOUT_REPOSITORY,
 			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
-			sh.SHELVES_NAME as STOCKOUT_SHELVES
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
 		from
 			wms_record_out r
 			LEFT JOIN wms_goods g
@@ -133,6 +158,7 @@
 	<select id="selectByRepositoryID" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
 			r.RECORD_GOODID as STOCKIN_GOOD_ID,
@@ -143,7 +169,11 @@
 			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
 			res.REPO_NAME as STOCKOUT_REPOSITORY,
 			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
-			sh.SHELVES_NAME as STOCKOUT_SHELVES
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
 		from
 			wms_record_out r
 			LEFT JOIN wms_goods g
@@ -161,6 +191,7 @@
 	<select id="selectByRepositoryIDAndDate" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
 			r.RECORD_GOODID as STOCKIN_GOOD_ID,
@@ -171,7 +202,11 @@
 			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
 			res.REPO_NAME as STOCKOUT_REPOSITORY,
 			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
-			sh.SHELVES_NAME as STOCKOUT_SHELVES
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
 		from
 			wms_record_out r
 			LEFT JOIN wms_goods g
@@ -193,11 +228,68 @@
 				<![CDATA[and r.RECORD_TIME <= #{endDate,jdbcType=DATE}]]>
 			</if>
 		</where>
+		GROUP BY STOCKOUT_BATCH
+		ORDER BY STOCKOUT_TIME DESC
+	</select>
+
+	<select id="selectByBatchId" resultMap="stockOutDO">
+		select
+			r.RECORD_ID as STOCKOUT_ID,
+			r.RECORD_BATCH as STOCKOUT_BATCH,
+			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
+			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
+			r.RECORD_GOODID as STOCKIN_GOOD_ID,
+			g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+			r.RECORD_NUMBER as STOCKOUT_NUMBER,
+			r.RECORD_TIME as STOCKOUT_TIME,
+			r.RECORD_PERSON as STOCKOUT_PERSON,
+			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+			res.REPO_NAME as STOCKOUT_REPOSITORY,
+			r.RECORD_SHELVESID as STOCKOUT_SHELVES_ID,
+			sh.SHELVES_NAME as STOCKOUT_SHELVES,
+			r.RECORD_PACKAGES as STOCKOUT_PACKAGES,
+			r.RECORD_REMARK as STOCKOUT_REMARK,
+			r.RECORD_STOREMAN as STOCKOUT_STOREMAN,
+			r.RECORD_INPUTMAN as STOCKOUT_INPUTMAN
+		from
+			wms_record_out r
+			LEFT JOIN wms_goods g
+			ON r.RECORD_GOODID = g.GOOD_ID
+			LEFT JOIN wms_customer c
+			ON r.RECORD_CUSTOMERID = c.CUSTOMER_ID
+			LEFT JOIN wms_respository res
+			ON r.RECORD_REPOSITORYID = res.REPO_ID
+			LEFT JOIN wms_shelves sh
+			ON r.RECORD_SHELVESID = sh.SHELVES_ID
+		WHERE
+			r.RECORD_BATCH = #{batchId}
 	</select>
 		
 	<insert id="insert">
-		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_SHELVESID)
-		values(#{customerID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID},#{shelvesID})
+		insert into wms_record_out(RECORD_ID,RECORD_BATCH,RECORD_CUSTOMERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_SHELVESID,RECORD_PACKAGES,RECORD_REMARK,RECORD_STOREMAN,RECORD_INPUTMAN)
+		values(#{id},#{batchId},#{customerID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID},#{shelvesID},#{packages},#{remark},#{storeman},#{inputman})
+	</insert>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into wms_record_out(RECORD_ID,RECORD_BATCH,RECORD_CUSTOMERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_SHELVESID,RECORD_PACKAGES,RECORD_REMARK,RECORD_STOREMAN,RECORD_INPUTMAN)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.id},
+				#{item.batchId},
+				#{item.customerID},
+				#{item.goodID},
+				#{item.number},
+				#{item.time},
+				#{item.personInCharge},
+				#{item.repositoryID},
+				#{item.shelvesID},
+				#{item.packages},
+				#{item.remark},
+				#{item.storeman},
+				#{item.inputman}
+			)
+		</foreach>
 	</insert>
 	
 	<update id="update">

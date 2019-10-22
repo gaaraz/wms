@@ -11,7 +11,7 @@ public class StockRecordDTO {
     /**
      * 记录ID
      */
-    private Integer recordID;
+    private String recordID;
 
     /**
      * 记录的类型（出库/入库）
@@ -72,8 +72,12 @@ public class StockRecordDTO {
         this.shelves = shelves;
     }
 
-    public Integer getRecordID() {
+    public String getRecordID() {
         return recordID;
+    }
+
+    public void setRecordID(String recordID) {
+        this.recordID = recordID;
     }
 
     public String getType() {
@@ -104,9 +108,6 @@ public class StockRecordDTO {
         return personInCharge;
     }
 
-    public void setRecordID(Integer recordID) {
-        this.recordID = recordID;
-    }
 
     public void setType(String type) {
         this.type = type;
