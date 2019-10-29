@@ -301,7 +301,7 @@ public class SystemLogServiceImpl implements SystemLogService {
         File file = null;
         try {
             Runtime rt = Runtime.getRuntime();
-            Process child = rt.exec("mysqldump -h localhost -P3306 -uroot -proot wms_db");
+            Process child = rt.exec("mysqldump -h localhost -P3306 -uroot -pjianyunroot wms_db");
 
             file = File.createTempFile("wms",".sql");
             InputStream in = child.getInputStream();
