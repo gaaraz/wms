@@ -205,7 +205,7 @@ pageEncoding="UTF-8"%>
     }
 
     function preview(row){
-        $("#previewTable tbody td").empty();
+        $("#previewTable tbody td[class != 'notEmpty']").empty();
         var head_tr = $("#previewTable thead").find(">tr");
         var date = new Date(row.time);
         head_tr.eq(0).find(">td").eq(1).html("单据编号: "+row.batchId);
@@ -224,25 +224,27 @@ pageEncoding="UTF-8"%>
         console.log(data);
         var body_tr = $("#previewTable tbody").find(">tr");
         for(var i=0;i<data.length;i++){
-            if (i < 12){
+            if (i < 11){
                 var td = body_tr.eq(i).find(">td");
                 td.eq(0).html(i+1);
                 td.eq(1).html(data[i].goodName);
-                td.eq(2).html(data[i].size);
+                td.eq(2).html(data[i].goodSize);
                 td.eq(3).html("");
                 td.eq(4).html(data[i].number);
-                td.eq(5).html(data[i].value);
-                td.eq(6).html(data[i].total);
+                td.eq(5).html(data[i].goodValue);
+                var total = (data[i].number * data[i].goodValue).toFixed(2);
+                td.eq(6).html(total);
                 td.eq(7).html(data[i].packages);
                 td.eq(8).html(data[i].remark);
             }else{
+                var total = (data[i].number * data[i].goodValue).toFixed(2);
                 $("<tr height='20'><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+(i+1)
-                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].name
-                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].size
+                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].goodName
+                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].goodSize
                     +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"
                     +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].number
-                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].value
-                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].total
+                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].goodValue
+                    +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+total
                     +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].packages
                     +"</td><td align='center' style='border: 1px solid #000;border-collapse:collapse;'>"+data[i].remark
                     +"</td></tr>").insertAfter($('#previewTable tbody tr:eq('+(i-1)+')'));
@@ -256,8 +258,8 @@ pageEncoding="UTF-8"%>
         LODOP.SET_PRINT_STYLEA(0,"ItemType", 1);
         LODOP.SET_PRINT_STYLEA(0,"FontSize", 20);
         LODOP.SET_PRINT_STYLEA(0,"Bold", 1);
-        LODOP.ADD_PRINT_LINE("12mm","30mm", "12mm", "210mm",0, 1);
-        LODOP.ADD_PRINT_TABLE("20mm","30mm","181mm","70mm",document.getElementById('previewDiv').innerHTML);
+        LODOP.ADD_PRINT_LINE("12mm","20mm", "12mm", "210mm",0, 1);
+        LODOP.ADD_PRINT_TABLE("20mm","20mm","181mm","70mm",document.getElementById('previewDiv').innerHTML);
         LODOP.PREVIEW();
 
     }
@@ -528,23 +530,12 @@ pageEncoding="UTF-8"%>
             <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
         </tr>
         <tr height="20" >
+            <td colspan='4' align='center' style="border: 1px solid #000;border-collapse:collapse;" class="notEmpty">合计</td>
+            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" tdata="AllSum" format="#" class="notEmpty">##</td>
             <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-        </tr>
-        <tr height="20" >
-            <td colspan='4' align='center' style="border: 1px solid #000;border-collapse:collapse;">合计</td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" tdata="AllSum" format="#">##</td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" tdata="AllSum" format="#,##0.00">##</td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" tdata="AllSum" format="#">##</td>
-            <td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
+            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" tdata="AllSum" format="#,##0.00" class="notEmpty">##</td>
+            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" tdata="AllSum" format="#" class="notEmpty">##</td>
+            <td align='center' style="border: 1px solid #000;border-collapse:collapse;" class="notEmpty"></td>
         </tr>
         </tbody>
         <tfoot>

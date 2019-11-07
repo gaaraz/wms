@@ -50,7 +50,7 @@ function preview(){
 
         var body_tr = $("#previewTable tbody").find(">tr");
 		for(var i=0;i<stockOutList.length;i++){
-			if (i < 12){
+			if (i < 11){
                 var td = body_tr.eq(i).find(">td");
 			    td.eq(0).html(i+1);
                 td.eq(1).html(stockOutList[i].name);
@@ -82,8 +82,8 @@ function preview(){
         LODOP.SET_PRINT_STYLEA(0,"ItemType", 1);
         LODOP.SET_PRINT_STYLEA(0,"FontSize", 20);
         LODOP.SET_PRINT_STYLEA(0,"Bold", 1);
-        LODOP.ADD_PRINT_LINE("12mm","30mm", "12mm", "210mm",0, 1);
-        LODOP.ADD_PRINT_TABLE("20mm","30mm","181mm","70mm",document.getElementById('previewDiv').innerHTML);
+        LODOP.ADD_PRINT_LINE("12mm","20mm", "12mm", "210mm",0, 1);
+        LODOP.ADD_PRINT_TABLE("20mm","20mm","181mm","70mm",document.getElementById('previewDiv').innerHTML);
         LODOP.PREVIEW();
 
 }
@@ -1107,17 +1107,6 @@ function merge_footer() {
 			</tr>
 		</thead>
 		<tbody>
-			<tr height="20" >
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
-			</tr>
 			<tr height="20" >
 				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>
 				<td align='center' style="border: 1px solid #000;border-collapse:collapse;"></td>

@@ -218,11 +218,11 @@
             <version>5.1.38</version>
         </dependency>
 
-        <!-- C3P0 dependency -->
+        <!-- 连接池 -->
         <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.2.1</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.9</version>
         </dependency>
 
         <!-- log4j dependency -->
